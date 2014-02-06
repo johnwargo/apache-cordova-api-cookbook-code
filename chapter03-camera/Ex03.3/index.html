@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Example 3.3</title>
+    <meta http-equiv="Content-type" content="text/html; charset=utf-8">
+    <meta name="viewport" id="viewport" content="width=device-width, height=device-height, initial-scale=1.0, maximum-scale=1.0, user-scalable=no;" />
+    <link rel="stylesheet" type="text/css" href="css/topcoat-mobile-light.min.css">
+    <script type="text/javascript" charset="utf-8" src="cordova.js"></script>
+    <script type="text/javascript" charset="utf-8">
+      function onBodyLoad() {
+        //Let the user know we've launched
+        alert("onBodyLoad");
+        //Set the Cordova deviceready event listener, so we'll know
+        //when Cordova is ready
+        document.addEventListener("deviceready", onDeviceReady, false);
+      }
+
+      function onDeviceReady() {
+        console.log("Entering onDeviceReady");
+        //Let the user know that the deviceReady event has fired
+        navigator.notification.alert("Cordova is ready", null, "Device Ready", "Continue");
+        console.log("Leaving onDeviceReady");
+      }
+
+      function takePhoto1() {
+        console.log("Entering takePhoto1");
+        var cameraOptions = {
+          quality : 50,
+          destinationType : Camera.DestinationType.DATA_URL,
+          sourceType : Camera.PictureSourceType.CAMERA
+        }
+        navigator.camera.getPicture(cameraSuccess, cameraError, cameraOptions);
+        console.log("Leaving takePhoto1");
+      }
+
+      function takePhoto2() {
+        console.log("Entering takePhoto2");
+        var cameraOptions = {
+          quality : 50,
+          destinationType : Camera.DestinationType.FILE_URI,
+          sourceType : Camera.PictureSourceType.CAMERA
+        }
+        navigator.camera.getPicture(cameraSuccess, cameraError, cameraOptions);
+        console.log("Leaving takePhoto2");
+      }
+
+      function takePhoto3() {
+        console.log("Entering takePhoto3");
+        var cameraOptions = {
+          quality : 50,
+          destinationType : Camera.DestinationType.NATIVE_URI,
+          sourceType : Camera.PictureSourceType.CAMERA
+        }
+        navigator.camera.getPicture(cameraSuccess, cameraError, cameraOptions);
+        console.log("Leaving takePhoto3");
+      }
+
+      function takePhoto4() {
+        console.log("Entering takePhoto4");
+        var cameraOptions = {
+          quality : 50,
+          destinationType : Camera.DestinationType.FILE_URI,
+          sourceType : Camera.PictureSourceType.PHOTOLIBRARY
+        }
+        navigator.camera.getPicture(cameraSuccess, cameraError, cameraOptions);
+        console.log("Leaving takePhoto4");
+      }
+
+      function takePhoto5() {
+        console.log("Entering takePhoto5");
+        var cameraOptions = {
+          quality : 50,
+          destinationType : Camera.DestinationType.FILE_URI,
+          sourceType : Camera.PictureSourceType.CAMERA
+        }
+        navigator.camera.getPicture(cameraSuccess, cameraError, cameraOptions);
+        console.log("Leaving takePhoto5");
+      }
+
+      function takePhoto6() {
+        console.log("Entering takePhoto6");
+        var cameraOptions = {
+          quality : 50,
+          destinationType : Camera.DestinationType.FILE_URI,
+          sourceType : Camera.PictureSourceType.SAVEDPHOTOALBUM
+        }
+        navigator.camera.getPicture(cameraSuccess, cameraError, cameraOptions);
+        console.log("Leaving takePhoto6");
+      }
+
+      function cameraSuccess(res) {
+        console.log("Entering cameraSuccess");
+        console.log("Result: " + res);
+        navigator.notification.alert(res, null, "Camera", "Continue");
+        console.log("Leaving cameraSuccess");
+      }
+
+      function cameraError(errObj) {
+        console.log("Entering cameraError");
+        console.error(JSON.stringify(errObj));
+        navigator.notification.alert(JSON.stringify(errObj), null, "Camera Error", "Continue");
+        console.log("Leaving cameraError");
+      }
+    </script>
+  </head>
+  <body onload="onBodyLoad()">
+    <div class="topcoat-navigation-bar">
+      <div class="topcoat-navigation-bar__item center full">
+        <h1 class="topcoat-navigation-bar__title">Example 3.3</h1>
+      </div>
+    </div>
+    <p>This is a Cordova application that uses the Cordova Camera API to take a picture using the device camera application.</p>
+    <h2>Destination</h2>
+    <p>Select one of the buttons below to capture a photo and return the result as the option listed.</p>
+    <div class="topcoat-button-bar">
+      <div class="topcoat-button-bar__item">
+        <button class="topcoat-button-bar__button" onclick="takePhoto1();">
+          Data URL
+        </button>
+      </div>
+      <div class="topcoat-button-bar__item">
+        <button class="topcoat-button-bar__button" onclick="takePhoto2();">
+          File
+        </button>
+      </div>
+      <div class="topcoat-button-bar__item">
+        <button class="topcoat-button-bar__button" onclick="takePhoto3();">
+          Native URI
+        </button>
+      </div>
+    </div>
+    <h2>Source</h2>
+    <p>Select one of the buttons below to capture a photo from the selected source.</p>
+    <div class="topcoat-button-bar">
+      <div class="topcoat-button-bar__item">
+        <button class="topcoat-button-bar__button" onclick="takePhoto4();">
+          Photo Lib
+        </button>
+      </div>
+      <div class="topcoat-button-bar__item">
+        <button class="topcoat-button-bar__button" onclick="takePhoto5();">
+          Camera
+        </button>
+      </div>
+      <div class="topcoat-button-bar__item">
+        <button class="topcoat-button-bar__button" onclick="takePhoto6();">
+          Album
+        </button>
+      </div>
+    </div>
+  </body>
+</html>

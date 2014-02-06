@@ -1,0 +1,215 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Example 7.1</title>
+    <meta name="viewport" content="width=device-width, height=device-height initial-scale=1.0, maximum-scale=1.0, user-scalable=no;" />
+    <meta http-equiv="Content-type" content="text/html; charset=utf-8">
+    <link rel="stylesheet" href="jquery.mobile-1.3.2.min.css" />
+    <script type="text/javascript" charset="utf-8" src="jquery-2.0.3.min.js"></script>
+    <script type="text/javascript" charset="utf-8" src="jquery.mobile-1.3.2.min.js"></script>
+    <script type="text/javascript" charset="utf-8" src="cordova.js"></script>
+    <script type="text/javascript">
+      //Alert Dialog Constants
+      var btnTitle = "Contact";
+      var btnText = "Continue";
+
+      //Some HTML constants we'll use
+      var br = "<br />";
+      var hr = "<hr />";
+      var endA = "</a>";
+
+      function onBodyLoad() {
+        //Let the user know we've launched
+        alert("onBodyLoad");
+        //Set the Cordova deviceready event listener, so we'll know
+        //when Cordova is ready
+        document.addEventListener("deviceready", onDeviceReady, false);
+      }
+
+      function onDeviceReady() {
+        console.log("Entering onDeviceReady");
+        //Let the user know that the deviceReady event has fired
+        navigator.notification.alert("Cordova is ready", null, "Device Ready", btnText);
+        console.log("Leaving onDeviceReady");
+      }
+
+      function getContact(contact) {
+        console.log("Entering getContact");
+        console.log("Contact: " + contact);
+        //Build a string representing the file name we're going
+        // after
+        var contactFile = "contacts/" + contact + ".js";
+        console.log("Using: " + contactFile);
+        //Get the contact information from the file system then
+        // call the callback function to parse the data
+        $.getJSON(contactFile, showContact);
+        console.log("Leaving getContact");
+      }
+
+      function showContact(contactData) {
+        console.log("Entering showContact");
+        console.log(JSON.stringify(contactData));
+        //======================================================
+        //Populate the Contact Details (cd) page content with
+        //information about this contact
+        //======================================================
+        //First set the header content for the page to match the
+        //contact's full name
+        //======================================================
+        $('#contactName').text(contactData.FullName);
+        //======================================================
+        //Then populate the body of the content area with
+        //detailed fields from the data source
+        //======================================================
+        var cd;
+        cd = '<b>First Name:</b> ' + contactData.FirstName + br;
+        cd += '<b>Last Name:</b> ' + contactData.LastName + br;
+        cd += '<b>Email Address:</b> <a href="mailto:' + contactData.EmailAddress + '">' + contactData.EmailAddress + endA + br;
+        cd += '<b>Office Phone:</b> <a href="tel:' + contactData.OfficePhone + '">' + contactData.OfficePhone + endA + br;
+        cd += '<b>Mobile Phone:</b> <a href="tel:' + contactData.MobilePhone + '">' + contactData.MobilePhone + endA + br;
+        $('#detailContent').html(cd);
+        //Update the onClick event so it can add the user
+        //without using a global variable to pass the data
+        $("#btnAdd").attr("onClick", "addContact(" + JSON.stringify(contactData) + ")");
+        //======================================================
+        //Then switch to the Contact Details page
+        //======================================================
+        $.mobile.changePage("#contactDetail", { transition : "slide"}, false, true);
+        console.log("Leaving showContact");
+      }
+
+      function addContact(contactData) {
+        console.log("Entering addContact");
+        console.log(JSON.stringify(contactData));
+        console.log("Adding " + contactData.FullName + " to contacts application");
+        //======================================================
+        //Create a new contact object
+        //======================================================
+        var contact = navigator.contacts.create();
+        //======================================================
+        //Populate the contact object with values
+        //======================================================
+        contact.displayName = contactData.FullName;
+        contact.nickname = contactData.FullName;
+        //======================================================
+        //Populate the Contact's Name entries
+        //======================================================
+        var tmpName = new ContactName();
+        tmpName.givenName = contactData.FirstName;
+        tmpName.familyName = contactData.LastName;
+        tmpName.formatted = contactData.FullName;
+        contact.name = tmpName;
+        //======================================================
+        //Populate Phone Number Entries
+        //======================================================
+        var phoneNums = [2];
+        phoneNums[0] = new ContactField('work', contactData.OfficePhone, false);
+        phoneNums[1] = new ContactField('mobile', contactData.MobilePhone, true);
+        contact.phoneNumbers = phoneNums;
+        //======================================================
+        //Populate Email Address
+        //======================================================
+        var emailAddresses = [1];
+        emailAddresses[0] = new ContactField('home', contactData.EmailAddress, true);
+        contact.emails = emailAddresses;
+
+        // save to device
+        console.log("Saving contact");
+        contact.save(contactSaveSuccess, contactSaveError);
+        console.log("Leaving addContact");
+      }
+
+      function contactSaveSuccess() {
+        console.log("Entering contactSaveSuccess");
+        navigator.notification.alert("Contact was successfully saved.", null, btnTitle, btnText);
+        console.log("Leaving contactSaveSuccess");
+      }
+
+      function contactSaveError(errObj) {
+        console.log("Entering contactSaveError");
+        console.error(JSON.stringify(errObj));
+        var msgText;
+        //======================================================
+        //Now build a message string based upon the error
+        //returned by the API
+        //======================================================
+        switch(errObj.code) {
+          case ContactError.UNKNOWN_ERROR:
+            msgText = "An Unknown Error was reported while saving the contact.";
+            break;
+          case ContactError.INVALID_ARGUMENT_ERROR:
+            msgText = "An invalid argument was used with the Contact API.";
+            break;
+          case ContactError.TIMEOUT_ERROR:
+            msgText = "Timeout Error.";
+            break;
+          case ContactError.PENDING_OPERATION_ERROR:
+            msgText = "Pending Operation Error.";
+            break;
+          case ContactError.IO_ERROR:
+            msgText = "IO Error.";
+            break;
+          case ContactError.NOT_SUPPORTED_ERROR:
+            msgText = "Not Supported Error.";
+            break;
+          case ContactError.PERMISSION_DENIED_ERROR:
+            msgText = "Permission Denied Error.";
+            break;
+          default:
+            //Create a generic response, just in case the
+            // switch fails
+            msgText = "Unknown Error (" + errObj.code + ")";
+            break;
+        }
+        //======================================================
+        //Now tell the user what happened
+        //======================================================
+        console.error(msgText);
+        navigator.notification.alert(msgText, null, btnTitle, btnText);
+      }
+    </script>
+  </head>
+  <body onload="onBodyLoad()">
+    <section id="main" data-role="page">
+      <header data-role="header">
+        <h1>Example 7.1</h1>
+      </header>
+      <div data-role="content">
+        <h3>Contact Selection</h3>
+        <p>Select your favorite Monty Python member from the following list:</p>
+        <br />
+        <div id="contacts">
+          <ul data-role="listview">
+            <li>
+              <a onclick="getContact('gchapman');">Graham Chapman</a>
+            </li>
+            <li>
+              <a onclick="getContact('jcleese');">John Cleese</a>
+            </li>
+            <li>
+              <a onclick="getContact('tgilliam');">Terry Gilliam</a>
+            </li>
+            <li>
+              <a onclick="getContact('eidle');">Eric Idle</a>
+            </li>
+            <li>
+              <a onclick="getContact('tjones');">Terry Jones</a>
+            </li>
+            <li>
+              <a onclick="getContact('mpalin');">Michael Palin</a>
+            </li>
+          </ul>
+        </div>
+      </div>
+    </section>
+    <section id="contactDetail" data-role="page" data-add-back-btn="true">
+      <header id="detailHeader" data-role="header">
+        <h1 id="contactName"></h1>
+      </header>
+      <div data-role="content">
+        <div id="detailContent"></div>
+        <input type="button" id="btnAdd" value="Add Contact" onclick="addContact();" />
+      </div>
+    </section>
+  </body>
+</html>

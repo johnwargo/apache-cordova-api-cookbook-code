@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Example 5.1</title>
+    <meta http-equiv="Content-type" content="text/html; charset=utf-8">
+    <meta name="viewport" id="viewport" content="width=device-width, height=device-height, initial-scale=1.0, maximum-scale=1.0, user-scalable=no;" />
+    <link rel="stylesheet" type="text/css" href="css/topcoat-mobile-light.min.css">
+    <script type="text/javascript" charset="utf-8" src="cordova.js"></script>
+    <script type="text/javascript" charset="utf-8">
+      //Cordova Ready variable, can't read the compass until
+      //Cordova initializes
+      var cvaReady = false;
+      //Has compass, assume true, may be changed later
+      var hasCompass = true;
+      //Compass heading info content area on the page
+      var hi;
+
+      function onBodyLoad() {
+        //Let the user know we've launched
+        alert("onBodyLoad");
+        //Set the Cordova deviceready event listener, so we'll know
+        //when Cordova is ready
+        document.addEventListener("deviceready", onDeviceReady, false);
+      }
+
+      function onDeviceReady() {
+        console.log("Entering onDeviceReady");
+        //Let the user know that the deviceReady event has fired
+        navigator.notification.alert("Cordova is ready", null, "Device Ready", "Continue");
+        //Get a handle we'll use to maipulate the accelerometer
+        //content on the page
+        hi = document.getElementById('headingInfo');
+        //Set the variable that lets other parts of the program
+        //know that Cordova has initialized
+        cvaReady = true;
+        console.log("Leaving onDeviceReady");
+      }
+
+      function getHeading() {
+        console.log('Entering getHeading');
+        //Clear the current heading results (if there are any)
+        hi.innerHTML = "";
+        if (cvaReady == true) {
+          if (hasCompass == true) {
+            //Update the current heading content,
+            //just in case it takes some time to get the reading
+            hi.innerHTML = "<p>Reading compass.</p>";
+            //get the current heading
+            navigator.compass.getCurrentHeading(headingSuccess, headingError);
+          } else {
+            navigator.notification.alert("No compass, please stop clicking the button.", null, "Compass Error", "Continue");
+          }
+        } else {
+          alert("Please wait. Cordova is not ready.");
+        }s
+        console.log('Leaving getHeading');
+      }
+
+      function headingSuccess(heading) {
+        console.log('Entering headingSuccess');
+        //We received something from the API, so...
+        //first get the timestamp in a date object
+        //so we can work with it
+        var d = new Date(heading.timestamp);
+        //Update the page to indicate that we have results to process
+        hi.innerHTML = "<p>Processing Results...</p>";
+        //first get the timestamp in a date object
+        //so we can work with it
+        var d = new Date(heading.timestamp);
+        var tmpStr;
+        //Build the HTML block that will render the compass heading
+        tmpStr = '<br /><ul class="topcoat-list__container"><h3 class="topcoat-list__header">Compass Reading</h3>';
+        tmpStr += makeListItem('Magnetic Heading: ' + heading.magneticHeading);
+        tmpStr += makeListItem('True Heading: ' + heading.trueHeading);
+        tmpStr += makeListItem('Heading Accuracy: ' + heading.headingAccuracy);
+        tmpStr += makeListItem('Timestamp: ' + d.toLocaleString());
+        //replace the page content with the current compass reading
+        hi.innerHTML = tmpStr;
+        console.log('Leaving headingSuccess');
+      }
+
+      function makeListItem(textStr) {
+        console.log("makeListItem: " + textStr);
+        return '<li class="topcoat-list__item">' + textStr + '</li>';
+      }
+
+      function headingError(compassError) {
+        console.log('Entering headingError');
+        var msgText;
+        msgText = "Unknown heading error!";
+        if (compassError.code == CompassError.COMPASS_NOT_SUPPORTED) {
+          msgText = "Compass not available.";
+          hasCompass == false;
+        } else if (compassError.code == CompassError.COMPASS_INTERNAL_ERR) {
+          msgText = "Compass Internal Error"                 
+        }
+        console.log(msgText);
+        navigator.notification.alert(msgText, null, 'Compass Error', 'Continue');
+        console.log('Leaving headingError');
+      }
+    </script>
+  </head>
+  <body onload="onBodyLoad()">
+    <div class="topcoat-navigation-bar">
+      <div class="topcoat-navigation-bar__item center full">
+        <h1 class="topcoat-navigation-bar__title">Example 5.1</h1>
+      </div>
+    </div>
+    <p> This is a Cordova application that measures device heading using the Compass API. Click the "Read Compass" button to read the compass.</p>
+    <button class="topcoat-button" onclick='getHeading();'>
+      Read Compass
+    </button>
+    <br />
+    <div id="headingInfo">
+      <p>No results yet, tap the button!</p>
+    </div>
+  </body>
+</html>

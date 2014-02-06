@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Example 11.1</title>
+    <meta charset="utf-8" />
+    <meta name="format-detection" content="telephone=no" />
+    <meta name="viewport" content="user-scalable=no, initial-scale=1, maximum-scale=1, minimum-scale=1, width=device-width, height=device-height" />
+    <link rel="stylesheet" type="text/css" href="css/topcoat-mobile-light.min.css">
+    <script type="text/javascript" charset="utf-8" src="cordova.js"></script>
+    <script type="text/javascript">
+      //Cordova Ready variable, can't enable the watch until
+      //Cordova initializes
+      var cvaReady = false;
+      //LocationInfo portion of the page
+      var li;
+      //Dialog constants
+      var alertTitle = "Geolocation";
+      var alertBtn = "Continue";
+
+      function onBodyLoad() {
+        //Let the user know we've launched
+        alert("onBodyLoad");
+        //Set the Cordova deviceready event listener, so we'll know
+        //when Cordova is ready
+        document.addEventListener("deviceready", onDeviceReady, false);
+      }
+
+      function onDeviceReady() {
+        console.log("Entering onDeviceReady");
+        //Let the user know that the deviceReady event has fired
+        navigator.notification.alert("Cordova is ready", null, "Device Ready", "Continue");
+        //Set the variable that lets other parts of the program
+        //know that Cordova has initialized
+        cvaReady = true;
+        //Get a handle we'll use to manipulate the accelerometer
+        //content on the page
+        li = document.getElementById('locationInfo');
+        console.log("Leaving onDeviceReady");
+      }
+
+      function getLocation() {
+        console.log("Entering getLocation");
+        if (cvaReady == true) {
+          //Replace the existing reading on the page
+          li.innerHTML = 'Starting Watch';
+          var locOptions = {
+            timeout : 5000,
+            enableHighAccuracy : true
+          };
+          //get the current location
+          navigator.geolocation.getCurrentPosition(locationSuccess, locationError, locOptions);
+          //Clear the current location while we wait for a reading
+          lc.innerHTML = "Reading location...";
+
+        } else {
+          alert("Please wait,Cordova is not ready.");
+        }
+        console.log("Entering getLocation");
+      }
+
+      function locationSuccess(loc) {
+
+        function makeListItem(theLabel, theValue) {
+          console.log('Label: ' + theLabel);
+          console.log('Value: ' + theValue);
+          return '<li class="topcoat-list__item">' + theLabel + ': ' + theValue + '</li>';
+        }
+
+
+        console.log("Entering locationSuccess");
+        //We received something from the API, so first get the
+        // timestamp in a date object so we can work with it
+        var d = new Date(loc.timestamp);
+        var tmpStr;
+        //Build the HTML block which will render the location reading
+        tmpStr = '<ul class="topcoat-list__container"><h3 class="topcoat-list__header">Location Reading</h3>';
+        tmpStr += makeListItem('Latitude', loc.coords.latitude);
+        tmpStr += makeListItem('Longitude', loc.coords.longitude);
+        tmpStr += makeListItem('Altitude', loc.coords.altitude);
+        tmpStr += makeListItem('Accuracy', loc.coords.accuracy);
+        tmpStr += makeListItem('Altitude Accuracy', loc.coords.altitudeAccuracy);
+        tmpStr += makeListItem('Heading', loc.coords.heading);
+        tmpStr += makeListItem('Speed', loc.coords.speed);
+        tmpStr += makeListItem('Timestamp', d.toLocaleString());
+        tmpStr += '</ul>';
+        //replace the page content with the current location reading
+        li.innerHTML = tmpStr;
+        console.log("Entering locationSuccess");
+      }
+
+      function locationError(errObj) {
+        console.error("Entering locationError");
+        li.innerHTML = 'Error Reading Location';
+        console.error(JSON.stringify(errObj));
+        navigator.notification.alert("Error: " + errObj.message + "(" + errObj.code + ")", null, alertTitle, alertBtn);
+        console.error("Leaving locationError");
+      }
+    </script>
+  </head>
+  <body onload="onBodyLoad()">
+    <div class="topcoat-navigation-bar">
+      <div class="topcoat-navigation-bar__item center full">
+        <h1 class="topcoat-navigation-bar__title">Example 11.1</h1>
+      </div>
+    </div>
+    <p>A Cordova Application that demonstrates the Geolocation API; click the Refresh Location button to measure the device's current location.</p>
+    <button class="topcoat-button" onclick="getLocation();">
+      Refresh Location
+    </button>
+    <hr />
+    <p id="locationInfo">Nothing to see here, click the button first.</p>
+  </body>
+</html>

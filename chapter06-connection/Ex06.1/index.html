@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Example 6.1</title>
+    <meta http-equiv="Content-type" content="text/html; charset=utf-8">
+    <meta name="viewport" id="viewport" content="width=device-width, height=device-height, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+    <link rel="stylesheet" type="text/css" href="css/topcoat-mobile-light.min.css">
+    <script type="text/javascript" charset="utf-8" src="jquery-2.0.3.min.js"></script>
+    <script type="text/javascript" charset="utf-8" src="cordova.js"></script>
+    <script type="text/javascript" charset="utf-8">
+      //build an accessible representation of the different network state values
+      var states = {};
+
+      function onBodyLoad() {
+        //Let the user know we've launched
+        alert("onBodyLoad");
+        //Set the Cordova deviceready event listener, so we'll know
+        //when Cordova is ready
+        document.addEventListener("deviceready", onDeviceReady, false);
+      }
+
+      function onDeviceReady() {
+        console.log("Entering onDeviceReady");
+        //Let the user know that the deviceReady event has fired
+        navigator.notification.alert("Cordova is ready", null, "Device Ready", "Continue");
+
+        //Populate the states array - Can only do this after
+        //deviceReady fires as the constants are not available otherwise
+        states[Connection.UNKNOWN] = 'Unknown';
+        states[Connection.ETHERNET] = 'Ethernet';
+        states[Connection.WIFI] = 'Wi-Fi';
+        states[Connection.CELL_2G] = 'Cell 2G';
+        states[Connection.CELL_3G] = 'Cell 3G';
+        states[Connection.CELL_4G] = 'Cell 4G';
+        states[Connection.CELL] = 'Cellular';
+        states[Connection.NONE] = 'No network';
+
+        //Add the online event listener
+        document.addEventListener("online", updateStatus, false);
+        //Add the offline event listener
+        document.addEventListener("offline", updateStatus, false);
+        updateStatus();
+        console.log("Leaving onDeviceReady");
+      }
+
+      function updateStatus() {
+        console.log("Entering updateStatus");
+        var networkState = navigator.network.connection.type;
+        var d = new Date();
+        //Are we connected?
+        if (networkState == Connection.NONE) {
+          console.log("Offline");
+          $('#networkInfo').prepend(d.toLocaleTimeString() + ": Offline<br />");
+        } else {
+          console.log("Online");
+          $('#networkInfo').prepend(d.toLocaleTimeString() + ": Online (" + states[networkState] + ")<br />");
+        }
+        console.log("Leaving updateStatus");
+      }
+
+    </script>
+  </head>
+  <body onload="onBodyLoad()">
+    <div class="topcoat-navigation-bar">
+      <div class="topcoat-navigation-bar__item center full">
+        <h1 class="topcoat-navigation-bar__title">Example 6.1</h1>
+      </div>
+    </div>
+    <p>This is a Cordova application that uses the Connection API to enhance an application's understanding of the device's network connection status.</p>
+    <hr />
+    <p id="networkInfo"></p>
+  </body>
+</html>

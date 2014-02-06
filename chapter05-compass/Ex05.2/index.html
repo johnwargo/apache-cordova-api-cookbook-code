@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Example 5.2</title>
+    <meta http-equiv="Content-type" content="text/html; charset=utf-8">
+    <meta name="viewport" id="viewport" content="width=device-width, height=device-height, initial-scale=1.0, maximum-scale=1.0, user-scalable=no;" />
+    <link rel="stylesheet" type="text/css" href="css/topcoat-mobile-light.min.css">
+    <STYLE type="text/css">
+      .centered {
+        text-align: center;
+        margin-top: 10px;
+        margin-bottom: 10px;
+      }
+    </STYLE>
+    <script type="text/javascript" charset="utf-8" src="jquery-2.0.3.min.js"></script>
+    <script type="text/javascript" charset="utf-8" src="jQueryRotateCompressed.js"></script>
+    <script type="text/javascript" charset="utf-8" src="cordova.js"></script>
+    <script type="text/javascript" charset="utf-8">
+      var watchID;
+      //Cordova Ready variable
+      var cvaReady = false;
+      //Setup the watch
+      //Read the compass 4 times a second (500 milliseconds, 0.5 seconds)
+      var watchOptions = {        
+        frequency : 500
+      };
+      //Some constants used for alert dialogs
+      dlgTitle = 'Compass';
+      btnText = 'Continue';
+
+      function onBodyLoad() {
+        //Let the user know we've launched
+        alert("onBodyLoad");
+        //Set the Cordova deviceready event listener, so we'll know
+        //when Cordova is ready
+        document.addEventListener("deviceready", onDeviceReady, false);
+      }
+
+      function onDeviceReady() {
+        console.log("Entering onDeviceReady");
+        //Set the variable that lets other parts of the program
+        //know that Cordova has initialized
+        cvaReady = true;
+        //Get a handle we'll use to maipulate the accelerometer
+        //content on the page
+        hi = document.getElementById('headingInfo');
+        //Let the user know that the deviceReady event has fired
+        navigator.notification.alert("Cordova is ready", null, "Device Ready", btnText);
+        console.log("Leaving onDeviceReady");
+      }
+
+      function startWatch() {
+        console.log("Entering startWatch");
+        //Is Cordova ready? If not, can't really do anything
+        if (cvaReady == true) {
+          //Do we already have a watch pending?
+          if (!watchID) {
+            //No watch pending, so we can set one
+            watchID = navigator.compass.watchHeading(headingSuccess, headingError, watchOptions);
+            //See what the watch ID looks like
+            console.log("Watch ID: " + JSON.stringify(watchID));
+          } else {
+            //Watch is already pending, so why is the user
+            //tapping the start button again?
+            console.log('Watch already enabled, see: ' + watchID);
+            navigator.notification.alert("There's already a watch enabled.", null, dlgTitle, btnText);
+          }
+        } else {
+          console.log('Cordova is not ready yet');
+          alert("Not yet, Cordova is not ready.");
+        }
+        console.log("Leaving startWatch");
+      }
+
+      function stopWatch() {
+        console.log("Entering stopWatch");
+        //Is there a watch active?
+        if (watchID) {
+          //Yes? then cancel it
+          console.log("Canceling the watch");
+          //Cancel the watch
+          navigator.compass.clearWatch(watchID);
+          //Clear our watchID value
+          watchID = null;
+          //Rotate the compass to North
+          $("#compass").rotate(0);
+          //Reset the heading on the screen
+          hi.innerHTML = "Current Heading: Unknown";
+        } else {
+          //No? Then why are you tapping the button?
+          console.log("No watch to cancel");
+          navigator.notification.alert("No watch enabled, nothing to stop.", null, dlgTitle, btnText);
+        }
+        console.log("Leaving stopWatch");
+      }
+
+      function headingSuccess(heading) {
+        console.log("Entering headingSuccess");
+        //Write out the heading to the log
+        console.log(JSON.stringify(heading));
+        //Determine the current degree heading (rounded)
+        var hv = Math.round(heading.magneticHeading);
+        //Update the screen
+        hi.innerHTML = "<b>Heading:</b> " + hv + " degrees";
+        //Rotate the compass image
+        $("#compass").rotate(-hv);
+        console.log("Leaving headingSuccess");
+      }
+
+      function headingError(compassError) {
+        console.log("Entering headingError");
+        var msgText;
+        //Write the error object to the log
+        console.error(JSON.stringify(compassError));
+        //Remove the watch since we're having a problem
+        navigator.compass.clearWatch(watchID);
+        //Clear the heading value from the page
+        hi.innerHTML = "Current Heading";
+        //Then tell the user what happened, set a default error first
+        msgText = "Unknown error";
+        //Check the error code
+        if (compassError.code == CompassError.COMPASS_NOT_SUPPORTED) {
+          msgText = "Compass not supported";
+        } else if (compassError.code == CompassError.COMPASS_INTERNAL_ERR) {
+          msgText = "Compass Internal Error";
+        }
+        //Tell the user what happened
+        console.error(msgText);
+        navigator.notification.alert(msgText, null, dlgTitle, btnText);
+        console.log("Leaving headingError");
+      }
+    </script>
+  </head>
+  <body onload="onBodyLoad()">
+    <div class="topcoat-navigation-bar">
+      <div class="topcoat-navigation-bar__item center full">
+        <h1 class="topcoat-navigation-bar__title">Example 5.2</h1>
+      </div>
+    </div>
+    <p> This is a Cordova application that measures device heading using the Compass API using a watch. Click the "Start" button to enable the watch.</p>
+    <div class="centered">
+      <img src="compass.png" id="compass" />
+      <p id="headingInfo">Current Heading: Unknown</p>
+      <div>
+        <button class="topcoat-button" onclick="startWatch();">
+          Start
+        </button>
+        <button class="topcoat-button"onclick="stopWatch();">
+          Stop
+        </button>
+      </div>
+    </div>
+  </body>
+</html>

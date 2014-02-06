@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Camera Size Test</title>
+    <meta http-equiv="Content-type" content="text/html; charset=utf-8">
+    <meta name="viewport" id="viewport" content="width=device-width, height=device-height, initial-scale=1.0, maximum-scale=1.0, user-scalable=no;" />
+    <link rel="stylesheet" type="text/css" href="css/topcoat-mobile-light.min.css">
+    <script type="text/javascript" charset="utf-8" src="cordova.js"></script>
+    <script type="text/javascript" charset="utf-8">
+      function onBodyLoad() {
+        //Let the user know we've launched
+        alert("onBodyLoad");
+        //Set the Cordova deviceready event listener, so we'll know
+        //when Cordova is ready
+        document.addEventListener("deviceready", onDeviceReady, false);
+      }
+
+      function onDeviceReady() {
+        console.log("Entering onDeviceReady");
+        //Let the user know that the deviceReady event has fired
+        navigator.notification.alert("Cordova is ready", null, "Device Ready", "Continue");
+        console.log("Leaving onDeviceReady");
+      }
+
+      function takePhoto1() {
+        //try to scale the photo to 640x480
+        console.log("Entering takePhoto1");
+        var cameraOptions = {
+          sourceType : Camera.PictureSourceType.CAMERA,
+          destinationType : navigator.camera.DestinationType.FILE_URI,
+          saveToPhotoAlbum : true,
+          targetWidth : 640,
+          targetHeight : 480,
+        };
+        navigator.camera.getPicture(cameraSuccess, cameraError, cameraOptions);
+        console.log("Leaving takePhoto1");
+      }
+
+      function takePhoto2() {
+        //try to scale the photo to 800x600
+        console.log("Entering takePhoto2");
+        var cameraOptions = {
+          sourceType : Camera.PictureSourceType.CAMERA,
+          destinationType : navigator.camera.DestinationType.FILE_URI,
+          saveToPhotoAlbum : true,
+          targetWidth : 800,
+          targetHeight : 600,
+        };
+        navigator.camera.getPicture(cameraSuccess, cameraError, cameraOptions);
+        console.log("Leaving takePhoto2");
+      }
+
+      function takePhoto3() {
+        //try to scale the photo to 1024x768
+        console.log("Entering takePhoto3");
+        var cameraOptions = {
+          sourceType : Camera.PictureSourceType.CAMERA,
+          destinationType : navigator.camera.DestinationType.FILE_URI,
+          saveToPhotoAlbum : true,
+          targetWidth : 1024,
+          targetHeight : 768,
+        };
+        navigator.camera.getPicture(cameraSuccess, cameraError, cameraOptions);
+        console.log("Leaving takePhoto3");
+      }
+
+      function takePhoto4() {
+        //Try to take a picture only specifying targetWidth
+        console.log("Entering takePhoto4");
+        var cameraOptions = {
+          sourceType : Camera.PictureSourceType.CAMERA,
+          destinationType : navigator.camera.DestinationType.FILE_URI,
+          saveToPhotoAlbum : true,
+          targetWidth : 1024
+        };
+        navigator.camera.getPicture(cameraSuccess, cameraError, cameraOptions);
+        console.log("Leaving takePhoto4");
+      }
+
+      function takePhoto5() {
+        //Try to take a picture only specifying targetHeight
+        console.log("Entering takePhoto5");
+        var cameraOptions = {
+          sourceType : Camera.PictureSourceType.CAMERA,
+          destinationType : navigator.camera.DestinationType.FILE_URI,
+          saveToPhotoAlbum : true,
+          targetHeight : 768
+        };
+        navigator.camera.getPicture(cameraSuccess, cameraError, cameraOptions);
+        console.log("Leaving takePhoto5");
+      }
+
+      function takePhoto6() {
+        //This should be an invalid dimension, aspect ratio is wrong
+        console.log("Entering takePhoto6");
+        var cameraOptions = {
+          sourceType : Camera.PictureSourceType.CAMERA,
+          destinationType : navigator.camera.DestinationType.FILE_URI,
+          saveToPhotoAlbum : true,
+          targetWidth : 2048,
+          targetHeight : 768,
+        };
+        navigator.camera.getPicture(cameraSuccess, cameraError, cameraOptions);
+        console.log("Leaving takePhoto6");
+      }
+
+      function cameraSuccess(res) {
+        console.log("Entering cameraSuccess");
+        console.log("Result: " + res);
+        navigator.notification.alert(res, null, "Camera", "Continue");
+        console.log("Leaving cameraSuccess");
+      }
+
+      function cameraError(errObj) {
+        console.log("Entering cameraError");
+        console.error(JSON.stringify(errObj));
+        navigator.notification.alert(JSON.stringify(errObj), null, "Camera Error", "Continue");
+        console.log("Leaving cameraError");
+      }
+
+    </script>
+  </head>
+  <body onload="onBodyLoad()">
+    <div class="topcoat-navigation-bar">
+      <div class="topcoat-navigation-bar__item center full">
+        <h1 class="topcoat-navigation-bar__title">Camera Size Test</h1>
+      </div>
+    </div>
+    <p>This is a Cordova application that tests the Cordova Camera API's targetwidth and targetheight properties.</p>
+    <div class="topcoat-button-bar">
+      <div class="topcoat-button-bar__item">
+        <button class="topcoat-button-bar__button" onclick="takePhoto1();">
+          640x480
+        </button>
+      </div>
+      <div class="topcoat-button-bar__item">
+        <button class="topcoat-button-bar__button" onclick="takePhoto2();">
+          800x600
+        </button>
+      </div>
+      <div class="topcoat-button-bar__item">
+        <button class="topcoat-button-bar__button" onclick="takePhoto3();">
+          1024x768
+        </button>
+      </div>
+    </div>
+    <br />
+    <div class="topcoat-button-bar">
+      <div class="topcoat-button-bar__item">
+        <button class="topcoat-button-bar__button" onclick="takePhoto4();">
+          1024x
+        </button>
+      </div>
+      <div class="topcoat-button-bar__item">
+        <button class="topcoat-button-bar__button" onclick="takePhoto5();">
+          x768
+        </button>
+      </div>
+      <div class="topcoat-button-bar__item">
+        <button class="topcoat-button-bar__button" onclick="takePhoto6();">
+          2048x768
+        </button>
+      </div>
+    </div>
+  </body>
+</html>

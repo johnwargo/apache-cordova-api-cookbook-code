@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Example 9.5</title>
+    <meta http-equiv="Content-type" content="text/html; charset=utf-8" />
+    <meta name="viewport" id="viewport" content="width=device-width, height=device-height, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+    <link rel="stylesheet" type="text/css" href="css/topcoat-mobile-light.min.css" />
+    <!-- Apply some styling to center the buttons -->
+    <STYLE type="text/css">
+      .centered {
+        text-align: center;
+        margin-top: 10px;
+        margin-bottom: 10px;
+      }
+    </STYLE>
+    <script type="text/javascript" charset="utf-8" src="jquery-2.0.3.min.js"></script>
+    <script type="text/javascript" charset="utf-8" src="cordova.js"></script>
+    <script type="text/javascript" charset="utf-8">
+      function onBodyLoad() {
+        //Let the user know we've launched
+        alert("onBodyLoad");
+        //Set the Cordova deviceready event listener, so we'll know
+        //when Cordova is ready
+        document.addEventListener("deviceready", onDeviceReady, false);
+      }
+
+      function onDeviceReady() {
+        console.log("Entering onDeviceReady");
+        //Let the user know that the deviceReady event has fired
+        navigator.notification.alert("Cordova is ready", null, "Device Ready", "Continue");
+        console.log("Leaving onDeviceReady");
+      }
+
+      function addEventListeners() {
+        console.log("Entering addEventListeners");
+        //Add the online event listener
+        document.addEventListener("online", isOnline, false);
+        //Add the offline event listener
+        document.addEventListener("offline", isOffline, false);
+        console.log("Leaving addEventListeners");
+      }
+
+      function removeEventListeners() {
+        console.log("Entering removeEventListeners");
+        //Remove the online event listener
+        document.removeEventListener("online", isOnline);
+        //Remove the offline event listener
+        document.removeEventListener("offline", isOffline);
+        console.log("Leaving removeEventListeners");
+      }
+
+      function isOnline() {
+        console.log("Online");
+        $('#networkInfo').prepend(getTimeString() + "Online<br />");
+      }
+
+      function isOffline() {
+        console.log("Offline");
+        $('#networkInfo').prepend(getTimeString() + "Offline<br />");
+      }
+
+      function getTimeString() {
+        var d = new Date();
+        return d.toLocaleTimeString() + ": ";
+      }
+    </script>
+  </head>
+  <body onload="onBodyLoad()">
+    <div class="topcoat-navigation-bar">
+      <div class="topcoat-navigation-bar__item center full">
+        <h1 class="topcoat-navigation-bar__title">Example 9.5</h1>
+      </div>
+    </div>
+    <p>This is a Cordova application that uses the event API to monitor online/offline status.</p>
+    <div class="centered">
+      <div>
+        <button class="topcoat-button" onclick="addEventListeners();">
+          Start
+        </button>
+        <button class="topcoat-button"onclick="removeEventListeners();">
+          Stop
+        </button>
+      </div>
+    </div>
+    <hr />
+    <p id="networkInfo"></p>
+  </body>
+</html>

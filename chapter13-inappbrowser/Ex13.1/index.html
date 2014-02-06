@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Example 13.1 - The InAppBrowser</title>
+    <meta charset="utf-8" />
+    <meta name="format-detection" content="telephone=no" />
+    <meta name="viewport" content="user-scalable=no, initial-scale=1, maximum-scale=1, minimum-scale=1, width=device-width, height=device-height" />
+    <link rel="stylesheet" type="text/css" href="css/topcoat-mobile-light.min.css">
+    <script type="text/javascript" charset="utf-8" src="jquery-1.9.1.min.js"></script>
+    <script type="text/javascript" charset="utf-8" src="index.js"></script>
+    <script type="text/javascript" charset="utf-8" src="cordova.js"></script>
+  </head>
+  <body onload="onBodyLoad()">
+    <div class="topcoat-navigation-bar">
+      <div class="topcoat-navigation-bar__item center full">
+        <h1 class="topcoat-navigation-bar__title">Example 13.1</h1>
+      </div>
+    </div>
+    <p>A Cordova Application that demonstrates some of the capabilities of the inAppBrowser.</p>
+
+    <!-------------------------------------------------------------->
+
+    <h2>Remote Content</h2>
+    <p>Tap one of the buttons below to open a remote web site in a browser window.</p>
+    <button class="topcoat-button" onclick="loadRemote1();">
+      Location=yes
+    </button>
+    <button class="topcoat-button" onclick="loadRemote2();">
+      Location=no
+    </button>
+
+    <!-------------------------------------------------------------->
+
+    <h2>Remote Targets</h2>
+    <p>Tap one of the buttons below to load a remote web site using the specified target.</p>
+    <button class="topcoat-button" onclick="loadRemote1();">
+      _blank
+    </button>
+    <button class="topcoat-button" onclick="loadRemote3();">
+      _self
+    </button>
+    <button class="topcoat-button" onclick="loadRemote4();">
+      _system
+    </button>
+
+    <hr />
+
+    <!-------------------------------------------------------------->
+
+    <h2>Local Content</h2>
+    <p>Tap one of the buttons below to open local content in a browser window.</p>
+    <button class="topcoat-button" onclick="loadLocal1();">
+      Location=yes
+    </button>
+    <button class="topcoat-button" onclick="loadLocal2();">
+      Location=no
+    </button>
+
+    <!-------------------------------------------------------------->
+
+    <h2>Local Targets</h2>
+    <p>Tap one of the buttons below to open local content using the specified target.</p>
+    <button class="topcoat-button" onclick="loadLocal1();">
+      _blank
+    </button>
+    <button class="topcoat-button" onclick="loadLocal3();">
+      _self
+    </button>
+    <button class="topcoat-button" onclick="loadLocal4();">
+      _system
+    </button>
+
+    <hr />
+
+    <!-------------------------------------------------------------->
+
+    <h2>Injecting Content</h2>
+    <p>Tap one of the buttons below to inject content into a local page.</p>
+    <button class="topcoat-button" onclick="injectCSS();">
+      CSS
+    </button>
+    <button class="topcoat-button" onclick="injectScript();">
+      JavaScript Code
+    </button>
+
+    <hr />
+
+    <!-------------------------------------------------------------->
+
+    <h2>Event Output</h2>
+    <pre id="eventOutput"></pre>
+  </body>
+</html>

@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Example 9.3</title>
+    <meta name="viewport" content="width=device-width, height=device-height initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+    <meta http-equiv="Content-type" content="text/html; charset=utf-8" />
+    <link rel="stylesheet" type="text/css" href="css/topcoat-mobile-light.min.css" />
+    <script type="text/javascript" charset="utf-8" src="jquery-2.0.3.min.js"></script>
+    <script type="text/javascript" charset="utf-8" src="cordova.js"></script>
+    <script type="text/javascript" charset="utf-8">
+      //Start time variable
+      var startTime, endTime;
+
+      window.onerror = function(msg, url, line) {
+        var resStr;
+        var idx = url.lastIndexOf('/');
+        if (idx > -1) {
+          url = url.substring(idx + 1);
+        }
+        resStr = 'ERROR in ' + url + ' on line ' + line + ': ' + msg;
+        console.error(resStr);
+        alert(resStr);
+        return false;
+      };
+
+      function onBodyLoad() {
+        //Let the user know we've launched
+        alert("onBodyLoad");
+        //Set the Cordova deviceready event listener, so we'll know
+        //when Cordova is ready
+        document.addEventListener("deviceready", onDeviceReady, false);
+      }
+
+      function onDeviceReady() {
+        console.log("Entering onDeviceReady");
+        //Let the user know that the deviceReady event has fired
+        navigator.notification.alert("Cordova is ready", null, "Device Ready", "Continue");
+        window.addEventListener("batterycritical", onBatteryCritical, false);
+        window.addEventListener("batterylow", onBatteryLow, false);
+        window.addEventListener("batterystatus", onBatteryStatus, false);
+        console.log("Leaving onDeviceReady");
+      }
+
+      function onBatteryCritical() {
+        console.log("Entering onBatteryCritical");
+        console.error("Battery is critical");
+        $('#batInfo').prepend("Battery Critical.<br />");
+      }
+
+      function onBatteryLow() {
+        console.log("Entering onBatteryLow");
+        console.warn("Battery is low");
+        $('#batInfo').prepend("Battery Low.<br />");
+      }
+
+      function onBatteryStatus(status) {
+        console.log("Entering onBatteryStatus");
+        console.log(JSON.stringify(status));
+        var msgText;
+        if (status.isPlugged) {
+          console.log("Device is plugged in");
+          msgText = "";
+        } else {
+          console.log("Device is not plugged in");
+          msgText = "not ";
+        }
+        msgText = status.level + "% (" + msgText + "plugged in) <br />";
+        console.log("Battery " + msgText);
+        $('#batInfo').prepend(msgText);
+      }
+
+    </script>
+  </head>
+  <body onload="onBodyLoad()">
+    <div class="topcoat-navigation-bar">
+      <div class="topcoat-navigation-bar__item center full">
+        <h1 class="topcoat-navigation-bar__title">Example 9.3</h1>
+      </div>
+    </div>
+    <p>This is a Cordova application that exercises the Cordova Battery Status events.</p>
+    <h3>Battery Status</h3>
+    <p id="batInfo"></p>
+  </body>
+</html>

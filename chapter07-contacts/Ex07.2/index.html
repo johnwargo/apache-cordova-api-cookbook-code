@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Example 7.2</title>
+    <meta name="viewport" content="width=device-width, height=device-height initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+    <meta http-equiv="Content-type" content="text/html; charset=utf-8">
+    <link rel="stylesheet" href="jquery.mobile-1.3.2.min.css" />
+    <script type="text/javascript" charset="utf-8" src="jquery-2.0.3.min.js"></script>
+    <script type="text/javascript" charset="utf-8" src="jquery.mobile-1.3.2.min.js"></script>
+    <script type="text/javascript" charset="utf-8" src="cordova.js"></script>
+    <script type="text/javascript" charset="utf-8" src="index.js"></script>
+  </head>
+  <body onload="onBodyLoad()">
+    <section id="main" data-role="page" >
+      <header data-role="header" data-id="head_main">
+        <h1>Example 7.2</h1>
+      </header>
+      <div data-role="content">
+        <div data-role="fieldcontain">
+          <legend>
+            Search Scope
+          </legend>
+          <fieldset data-role="controlgroup" data-type="horizontal" >
+            <label for="searchAll">All</label>
+            <input type="radio" id="searchAll" name="searchScope" id="searchScope0" value="0" checked="checked">
+            <label for="searchAddress">Address</label>
+            <input type="radio" id="searchAddress" name="searchScope" id="searchScope1" value="1">
+            <label for="searchName">Name</label>
+            <input type="radio" id="searchName" name="searchScope" id="searchScope2" value="2">
+            <label for="searchNotes">Notes</label>
+            <input type="radio" id="searchNotes" name="searchScope" id="searchScope3" value="3">
+          </fieldset>
+          <br />
+          <fieldset data-role="controlgroup">
+            <label for="editSearch">Search for:</label>
+            <input type="text" id="editSearch" />
+          </fieldset>
+        </div>
+        <input type="button" onclick="searchContacts();" id="btnSearch" value="Search" data-icon="search"/>
+      </div>
+      <div data-role="footer" data-id="foot_main" data-position="fixed">
+        <h4>www.cordovacookbook.com</h4>
+      </div>
+    </section>
+    <section id="contactList" data-role="page" data-add-back-btn="true">
+      <header data-role="header" data-id="head_main">
+        <h1>Search Results</h1>
+      </header>
+      <div data-role="content">
+        <p>Select a contact from the list:</p>
+        <ul id="contacts" data-role="listview">          
+        </ul>
+      </div>
+      <div data-role="footer" data-id="foot_main" data-position="fixed">
+        <h4>www.cordovacookbook.com</h4>
+      </div>
+    </section>
+    <section id="contactDetail" data-role="page" data-add-back-btn="true">
+      <header id="detailHeader" data-role="header">
+        <h1 id="contactName"></h1>
+      </header>
+      <div data-role="content">
+        <div id="detailContent"></div>
+        <input type="button" id="btnAdd" value="Upload Contact" onclick="uploadContact();" />
+      </div>
+      <div data-role="footer" data-id="foot_main" data-position="fixed">
+        <h4>www.cordovacookbook.com</h4>
+      </div>
+    </section>
+  </body>
+</html>

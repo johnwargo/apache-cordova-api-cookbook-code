@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Example 4.1</title>
+    <meta name="viewport" content="width=device-width, height=device-height initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+    <meta http-equiv="Content-type" content="text/html; charset=utf-8">
+    <link rel="stylesheet" href="jquery.mobile-1.3.2.min.css" />
+    <script type="text/javascript" charset="utf-8" src="jquery-2.0.3.min.js"></script>
+    <script type="text/javascript" charset="utf-8" src="jquery.mobile-1.3.2.min.js"></script>
+    <script type="text/javascript" charset="utf-8" src="cordova.js"></script>
+    <script type="text/javascript" charset="utf-8">
+      function onBodyLoad() {
+        //Let the user know we got this far
+        alert("onBodyLoad");
+        //Add the Cordova deviceready event listener
+        document.addEventListener("deviceready", onDeviceReady, false);
+      }
+
+      function onDeviceReady() {
+        console.log("Entering onDeviceReady");
+        //Let the user know we got this far
+        navigator.notification.alert("Cordova is ready", null, "Device Ready", "Continue");
+        console.log("Leaving onDeviceReady");
+      }
+
+      function doCapture() {
+        console.log("Entering doCapture");
+        //Clear out any previous results
+        $("#captureResults").html("Initiating capture...");
+        //Retrieve the number of items to capture from the form
+        var numItems = document.getElementById("numItems").value;
+        console.log("Items: " + numItems);
+        //Retrieve the capture duration from the form
+        var capDur = document.getElementById("duration").value;
+        console.log("Duration: " + capDur);
+        //Figure out which capture option is selected
+        var captureType = parseInt($("input:checked").val());
+        console.log("Capture type: " + captureType);
+        switch(captureType) {
+          case 0:
+            //Capture Audio
+            console.log("Starting audio capture");
+            navigator.device.capture.captureAudio(captureSuccess, captureError, {
+              duration : capDur,
+              limit : numItems
+            });
+            break;
+          case 1:
+            //Capture Image
+            console.log("Starting image capture");
+            navigator.device.capture.captureImage(captureSuccess, captureError, {
+              limit : numItems
+              //capture duration not used for image capture
+            });
+            break;
+          case 2:
+            //Capture Video
+            console.log("Starting video capture");
+            navigator.device.capture.captureVideo(captureSuccess, captureError, {
+              duration : capDur,
+              limit : numItems
+            });
+            break;
+        }
+        console.log("Leaving doCapture");
+      }
+
+      function captureSuccess(fileList) {
+        console.log("Entering captureSuccess");
+        //Used to insert a break into the HTML output
+        var br = "<br />";
+        //Write the file list to the log so we can see it during debugging
+        console.log(JSON.stringify(fileList));
+        var i, len, htmlStr, tmpStr;
+        len = fileList.length;
+        //Make sure we had a result; it should always be
+        //greater than 0, but you never know.
+        if (len > 0) {
+          console.log("Processing file list");
+          htmlStr = "";
+          //start looping through the file list
+          for ( i = 0, len; i < len; i += 1) {
+            //Write the content we'll be working with to the log (for debugging)
+            console.log("File #" + i + ": " + fileList[i].name);
+            tmpStr = "<strong>File " + i + "</strong><hr />";
+            for (var key in fileList[i]) {
+              if (fileList[i].hasOwnProperty(key)) {
+                tmpStr += "<strong>" + key + ":</strong> " + fileList[i][key] + br;
+              }
+            }
+            //Append it to the full HTML results string
+            htmlStr += tmpStr + br;
+          }
+        }
+        //Set the results content on the page to display the results
+        $("#captureResults").html(htmlStr);
+        console.log("Leaving captureSuccess");
+      }
+
+      function captureError(errObj) {
+        console.log("Entering onCaptureError");
+        //Write the contents of the Error Object to the log (as an error entry)
+        console.error(JSON.stringify(errObj));
+        //Used while the function calculates the message to display
+        var msgText;
+        //Clear the previous results text, nothing to show right now
+        $("#captureResults").html("");
+        //Now build a message string based upon the error returned
+        //by the API
+        switch(errObj.code) {
+          case CaptureError.CAPTURE_INTERNAL_ERR:
+            msgText = "Internal error.";
+            break;
+          case CaptureError.CAPTURE_APPLICATION_BUSY:
+            msgText = "The capture application (camera application or audio recorder) is currently serving other capture request.";
+            break;
+          case CaptureError.CAPTURE_INVALID_ARGUMENT:
+            msgText = "Invalid parameter passed to the API.";
+            break;
+          case CaptureError.CAPTURE_NO_MEDIA_FILES:
+            msgText = "No media file(s) provided. User likely cancelled the capture process.";
+            break;
+          case CaptureError.CAPTURE_NOT_SUPPORTED:
+            msgText = "The requested operation is not supported on this device.";
+            break;
+          default:
+            //Create a generic response, just in case the
+            //switch fails (it shouldn't, but could)
+            msgText = "Unknown Error (" + errObj.code + ")";
+        }
+        //Now tell the user what happened
+        console.error(msgText);
+        navigator.notification.alert(msgText, null, "Capture Error", "Continue");
+        console.log("Leaving onCaptureError");
+      }
+    </script>
+  </head>
+  <body onload="onBodyLoad()">
+    <div data-role="header">
+      <h1>Example 4.1</h1>
+    </div>
+    <div data-role="content">
+      <p>This is an application that exercises the Cordova Capture API. Select a Capture Type then set the other options as needed then tap the "Capture" button to initiate the media capture.</p>
+      <legend>
+        Capture Type
+      </legend>
+      <fieldset data-role="controlgroup" data-type="horizontal" >
+        <label for="captureAudio">Audio</label>
+        <input type="radio" id="captureAudio" name="captureType" id="captureType0" value="0" checked="checked">
+        <label for="captureImage">Image</label>
+        <input type="radio" id="captureImage" name="captureType" id="captureType1" value="1">
+        <label for="captureVideo">Video</label>
+        <input type="radio" id="captureVideo" name="captureType" id="captureType2" value="2">
+      </fieldset>
+      <label for="numItems">Number of Items</label>
+      <input type="range" name="numItems" id="numItems" value="1" min="1" max="5" />
+      <label for="duration">Duration</label>
+      <input type="range" name="duration" id="duration" value="5" min="1" max="10" />
+      <input type="button" id="captureButton" value="Capture" onclick="doCapture();">
+      <h1>Results</h1>
+      <div id="captureResults"></div>
+    </div>
+  </body>
+</html>

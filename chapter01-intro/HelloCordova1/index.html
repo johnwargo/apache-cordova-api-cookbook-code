@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Hello Cordova 1</title>
+    <meta http-equiv="Content-type" content="text/html; charset=utf-8">
+    <meta name="viewport" id="viewport" content="width=device-width, height=device-height, initial-scale=1.0, maximum-scale=1.0, user-scalable=no;" />
+    <script type="text/javascript" charset="utf-8" src="cordova.js"></script>
+    <script type="text/javascript" charset="utf-8">
+      function onBodyLoad() {
+        //Let the user know we've launched
+        alert("onBodyLoad");
+        //Set the Cordova deviceready event listener, so we'll know
+        //when Cordova is ready
+        document.addEventListener("deviceready", onDeviceReady, false);
+      }
+
+      function onDeviceReady() {
+        var br = "<br />";
+        navigator.notification.alert("Cordova is ready", null, "Device Ready", "Continue");
+        //Get the appInfo DOM element
+        var element = document.getElementById('devInfo');
+        //replace it with specific information about the device running the application
+        element.innerHTML = 'Cordova Version: ' + device.cordova + br + 'Operating System: ' + device.platform + br + 'OS Version: ' + device.version + br + 'Device Model: ' + device.model + br + 'Universally Unique Identifier: ' + device.uuid;
+      }
+    </script>
+  </head>
+  <body onload="onBodyLoad()">
+    <h1>Cordova Information</h1>
+    <p> This is an Apache Cordova application that makes calls to the Cordova Device API. </p>
+    <p id="devInfo"> Waiting for Cordova Initialization to complete. </p>
+  </body>
+</html>

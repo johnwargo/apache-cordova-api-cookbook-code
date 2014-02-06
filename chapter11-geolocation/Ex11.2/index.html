@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Example 11.2</title>
+    <meta charset="utf-8" />
+    <meta name="format-detection" content="telephone=no" />
+    <meta name="viewport" content="user-scalable=no, initial-scale=1, maximum-scale=1, minimum-scale=1, width=device-width, height=device-height" />
+    <link rel="stylesheet" type="text/css" href="css/topcoat-mobile-light.min.css">
+    <script type="text/javascript" charset="utf-8" src="cordova.js"></script>
+    <script type="text/javascript">
+      //Cordova Ready variable, can't enable the watch until
+      //Cordova initializes
+      var cvaReady = false;
+      //LocationInfo portion of the page
+      var li;
+      //SkipAlert portion of the page
+      var skipAlert;
+      //The application's watchID, used to cancel it
+      var watchID;
+      //Location options object
+      var locationOptions;
+      //LastLongitude and LastLattitude variables.
+      //Used to determine whether location has changed
+      var lastLong, lastLat;
+      //Dialog constants
+      var alertTitle = "Geolocation";
+      var alertBtn = "Continue";
+
+      function onBodyLoad() {
+        //Let the user know we've launched
+        alert("onBodyLoad");
+        //Set the Cordova deviceready event listener, so we'll know
+        //when Cordova is ready
+        document.addEventListener("deviceready", onDeviceReady, false);
+      }
+
+      function onDeviceReady() {
+        console.log("Entering onDeviceReady");
+        //Let the user know that the deviceReady event has fired
+        navigator.notification.alert("Cordova is ready", null, "Device Ready", "Continue");
+        //Set the variable that lets other parts of the program
+        //know that Cordova has initialized
+        cvaReady = true;
+        //Get a handle we'll use to maipulate the accelerometer
+        //content on the page
+        li = document.getElementById('locationInfo');
+        skipAlert = document.getElementById('skipAlert');
+        //Define the application's Geolocation Options
+        //only need to do this once, so that's why this is defined here
+        locationOptions = {
+          maximumAge : 10000,
+          timeout : 5000,
+          enableHighAccuracy : true
+        };
+        console.log("Leaving onDeviceReady");
+      }
+
+      function startWatch() {
+        console.log("Entering startWatch");
+        //Has Cordova initialized?
+        if (cvaReady) {
+          //Do we have a watch already running?
+          if (!watchID) {
+            //Update the screen so the user knows the watch is starting
+            //Blank out any pevious skip alert warning
+            skipAlert.innerHTML = "";
+            //It might take a few seconds for the first results to appear
+            li.innerHTML = 'Starting Watch';
+            //start the watch
+            watchID = navigator.geolocation.watchPosition(locationSuccess, locationError, locationOptions);
+          } else {
+            console.log("Watch is already active");
+            navigator.notification.alert("A watch is already enabled.\nPlease don't tap the Start button.", null, alertTitle, alertBtn);
+          }
+        } else {
+          console.log("Cordova is not ready");
+          navigator.notification.alert("Please wait until Cordova has initialized.", null, alertTitle, alertBtn);
+        }
+        console.log("Leaving startWatch");
+      }
+
+      function cancelWatch() {
+        console.log("Entering cancelWatch");
+        //Do we have a watch active?
+        if (watchID) {
+          //Clear the watch
+          navigator.geolocation.clearWatch(watchID);
+          //Clear the watch ID (just because)
+          watchID = null;
+          //Clear out the last location results
+          li.innerHTML = '';
+          //Blank out the skip alert warning
+          skipAlert.innerHTML = "";
+          navigator.notification.alert("Watch cancelled", null, alertTitle, alertBtn);
+        } else {
+          console.log("Watch not active");
+          navigator.notification.alert("A watch is not active, nothing to cancel.\nPlease don't tap the Cancel button.", null, alertTitle, alertBtn);
+        }
+        console.log("Entering cancelWatch");
+      }
+
+      function locationSuccess(loc) {
+
+        function makeListItem(theLabel, theValue) {
+          console.log('Label: ' + theLabel);
+          console.log('Value: ' + theValue);
+          return '<li class="topcoat-list__item">' + theLabel + ': ' + theValue + '</li>';
+        }
+
+
+        console.log("Entering locationSuccess");
+        //get the timestamp in a date object so we can work with it
+        var d = new Date(loc.timestamp);
+        //Check to see if the device has even moved
+        if (lastLat != loc.coords.latitude || lastLong != loc.coords.longitude) {
+          //Blank out the skip alert warning
+          skipAlert.innerHTML = "";
+
+          var tmpStr;
+          //Build the HTML block which will render the location reading
+          tmpStr = '<ul class="topcoat-list__container"><h3 class="topcoat-list__header">Location Reading</h3>';
+          tmpStr += makeListItem('Latitude', loc.coords.latitude);
+          tmpStr += makeListItem('Longitude', loc.coords.longitude);
+          tmpStr += makeListItem('Altitude', loc.coords.altitude);
+          tmpStr += makeListItem('Accuracy', loc.coords.accuracy);
+          tmpStr += makeListItem('Altitude Accuracy', loc.coords.altitudeAccuracy);
+          tmpStr += makeListItem('Heading', loc.coords.heading);
+          tmpStr += makeListItem('Speed', loc.coords.speed);
+          tmpStr += makeListItem('Timestamp', d.toLocaleString());
+          tmpStr += '</ul>';
+          //replace the page content with the current location reading
+          li.innerHTML = tmpStr;
+          //Update the lastLat and lastLong variables
+          lastLat = loc.coords.latitude;
+          lastLong = loc.coords.longitude;
+        } else {
+          console.log("Skipping page update, location has not changed");
+          skipAlert.innerHTML = "Skipping reading @ " + d.toLocaleTimeString();
+        }
+        console.log("Entering locationSuccess");
+      }
+
+      function locationError(errObj) {
+        console.error("Entering locationError");
+        li.innerHTML = 'Error Reading Location';
+        console.error(JSON.stringify(errObj));
+        navigator.notification.alert("Error: " + errObj.message + " (code: " + errObj.code + ")", null, alertTitle, alertBtn);
+        console.error("Leaving locationError");
+      }
+
+    </script>
+  </head>
+  <body onload="onBodyLoad()">
+    <div class="topcoat-navigation-bar">
+      <div class="topcoat-navigation-bar__item center full">
+        <h1 class="topcoat-navigation-bar__title">Example 11.2</h1>
+      </div>
+    </div>
+    <p>A Cordova Application that demonstrates the Geolocation API; click the Refresh Location button to measure the device's current location.</p>
+    <div>
+      <button class="topcoat-button" onclick="startWatch();">
+        Start Watch
+      </button>
+      <button class="topcoat-button"onclick="cancelWatch();">
+        Cancel Watch
+      </button>
+    </div>
+    <br />
+    <p id="skipAlert"></p>
+    <p id="locationInfo">Nothing to see here, click the button first.</p>
+  </body>
+</html>

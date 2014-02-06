@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Example 12.2</title>
+    <meta charset="utf-8" />
+    <meta name="format-detection" content="telephone=no" />
+    <meta name="viewport" content="user-scalable=no, initial-scale=1, maximum-scale=1, minimum-scale=1, width=device-width, height=device-height" />
+    <!-- Load the jQuery Mobile CSS file -->
+    <link rel="stylesheet" href="jquery.mobile-1.3.2.min.css" />
+    <!-- Then the jQuery support files -->
+    <script type="text/javascript" charset="utf-8" src="jquery-1.9.1.min.js"></script>
+    <script type="text/javascript" charset="utf-8" src="jquery.mobile-1.3.2.min.js"></script>
+    <!-- Load the cordova JavaScript file -->
+    <script type="text/javascript" charset="utf-8" src="cordova.js"></script>
+    <!-- Load the application's main JavaScript file -->
+    <script type="text/javascript" charset="utf-8" src="index.js"></script>
+  </head>
+  <body onload="onBodyLoad()">
+
+    <!-- Main page -->
+    <section id="main" data-role="page" data-add-back-btn="true">
+      <header data-role="header">
+        <h1>Example 12.2</h1>
+      </header>
+      <div data-role="content">
+        <p>This is a Cordova application that uses the Globalization API. Make a selection from the following list to view API results for the selected category</p>
+        <div data-role="collapsible-set" data-theme="c" data-content-theme="d" data-inset="false">
+          <div data-role="collapsible">
+            <h2>Currency</h2>
+            <ul data-role="listview">
+              <li><a href="#" onclick="doGetCurrencyPattern('USD')"><h1>getCurrencyPattern (USD)</h1><p>US Dollars</p></a></li>
+              <li><a href="#" onclick="doGetCurrencyPattern('GBP')"><h1>getCurrencyPattern (GBP)</h1><p>Pounds Sterling</p></a></li>
+              <li><a href="#" onclick="doGetCurrencyPattern('EUR')"><h1>getCurrencyPattern (EUR)</h1><p>Euros</p></h1></a></li>
+              <li><a href="#" onclick="doGetCurrencyPattern('###')"><h1>getCurrencyPattern (invalid)</h1><p>Calls getCurrencyPattern with an invalid currency string so you can see what happens when this fails.</p></a></li>
+            </ul>
+          </div>
+          <div data-role="collapsible">
+            <h2>Date</h2>
+            <ul data-role="listview">
+              <li><a href="#" onclick="doIsDayLightSavingsTime()">isDayLightSavingsTime</a></li>
+              <li><a href="#" onclick="doGetFirstDayOfWeek()">getFirstDayOfWeek</a></li>
+              <li data-role="list-divider">Get Date Names</li>
+              <li><a href="#" onclick="doGetDateNames()">getDateNames (default)</a></li>
+              <li><a href="#" onclick="doGetDateNames({type:'narrow', item:'days'})">getDateNames (narrow, days)</a></li>
+              <li><a href="#" onclick="doGetDateNames({type:'wide', item:'days'})">getDateNames (wide, days)</a></li>
+              <li><a href="#" onclick="doGetDateNames({type:'narrow', item:'months'})">getDateNames (narrow, months)</a></li>
+              <li><a href="#" onclick="doGetDateNames({type:'wide', item:'months'})">getDateNames (wide, months)</a></li>
+              <li data-role="list-divider">Get Date Pattern</li>
+              <li><a href="#" onclick="doGetDatePattern()">getDatePattern (default)</a></li>
+              <li><a href="#" onclick="doGetDatePattern({formatLength:'short', selector:'date'})">getDatePattern (short, date)</a></li>
+              <li><a href="#" onclick="doGetDatePattern({formatLength:'short', selector:'time'})">getDatePattern (short, time)</a></li>
+              <li><a href="#" onclick="doGetDatePattern({formatLength:'short', selector:'date and time'})">getDatePattern (short, date and time)</a></li>
+              <li><a href="#" onclick="doGetDatePattern({formatLength:'medium', selector:'date'})">getDatePattern (medium, date)</a></li>
+              <li><a href="#" onclick="doGetDatePattern({formatLength:'medium', selector:'time'})">getDatePattern (medium, time)</a></li>
+              <li><a href="#" onclick="doGetDatePattern({formatLength:'medium', selector:'date and time'})">getDatePattern (medium, date and time)</a></li>
+              <li><a href="#" onclick="doGetDatePattern({formatLength:'long', selector:'date'})">getDatePattern (long, date)</a></li>
+              <li><a href="#" onclick="doGetDatePattern({formatLength:'long', selector:'time'})">getDatePattern (long, time)</a></li>
+              <li><a href="#" onclick="doGetDatePattern({formatLength:'long', selector:'date and time'})">getDatePattern (long, date and time)</a></li>
+              <li><a href="#" onclick="doGetDatePattern({formatLength:'full', selector:'date'})">getDatePattern (full, date)</a></li>
+              <li><a href="#" onclick="doGetDatePattern({formatLength:'full', selector:'time'})">getDatePattern (full, time)</a></li>
+              <li><a href="#" onclick="doGetDatePattern({formatLength:'full', selector:'date and time'})">getDatePattern (full, date and time)</a></li>
+              <li data-role="list-divider">Date to String</li>
+              <li><a href="#" onclick="doDateToString()">dateToString (default)</a></li>
+              <li><a href="#" onclick="doDateToString({formatLength:'short', selector:'date'})">dateToString (short, date)</a></li>
+              <li><a href="#" onclick="doDateToString({formatLength:'short', selector:'time'})">dateToString (short, time)</a></li>
+              <li><a href="#" onclick="doDateToString({formatLength:'short', selector:'date and time'})">dateToString (short, date and time)</a></li>
+              <li><a href="#" onclick="doDateToString({formatLength:'medium', selector:'date'})">dateToString (medium, date)</a></li>
+              <li><a href="#" onclick="doDateToString({formatLength:'medium', selector:'time'})">dateToString (medium, time)</a></li>
+              <li><a href="#" onclick="doDateToString({formatLength:'medium', selector:'date and time'})">dateToString (medium, date and time)</a></li>
+              <li><a href="#" onclick="doDateToString({formatLength:'long', selector:'date'})">dateToString (long, date)</a></li>
+              <li><a href="#" onclick="doDateToString({formatLength:'long', selector:'time'})">dateToString (long, time)</a></li>
+              <li><a href="#" onclick="doDateToString({formatLength:'long', selector:'date and time'})">dateToString (long, date and time)</a></li>
+              <li><a href="#" onclick="doDateToString({formatLength:'full', selector:'date'})">dateToString (full, date)</a></li>
+              <li><a href="#" onclick="doDateToString({formatLength:'full', selector:'time'})">dateToString (full, time)</a></li>
+              <li><a href="#" onclick="doDateToString({formatLength:'full', selector:'date and time'})">dateToString (full, date and time)</a></li>
+              <li data-role="list-divider">String to Date</li>
+              <li><a href="#" onclick="doStringToDate()">stringToDate (default)</a></li>
+              <li><a href="#" onclick="doStringToDate({formatLength:'short', selector:'date'})">stringToDate (short, date)</a></li>
+              <li><a href="#" onclick="doStringToDate({formatLength:'short', selector:'time'})">stringToDate (short, time)</a></li>
+              <li><a href="#" onclick="doStringToDate({formatLength:'short', selector:'date and time'})">stringToDate (short, date and time)</a></li>
+              <li><a href="#" onclick="doStringToDate({formatLength:'medium', selector:'date'})">stringToDate (medium, date)</a></li>
+              <li><a href="#" onclick="doStringToDate({formatLength:'medium', selector:'time'})">stringToDate (medium, time)</a></li>
+              <li><a href="#" onclick="doStringToDate({formatLength:'medium', selector:'date and time'})">stringToDate (medium, date and time)</a></li>
+              <li><a href="#" onclick="doStringToDate({formatLength:'long', selector:'date'})">stringToDate (long, date)</a></li>
+              <li><a href="#" onclick="doStringToDate({formatLength:'long', selector:'time'})">stringToDate (long, time)</a></li>
+              <li><a href="#" onclick="doStringToDate({formatLength:'long', selector:'date and time'})">stringToDate (long, date and time)</a></li>
+              <li><a href="#" onclick="doStringToDate({formatLength:'full', selector:'date'})">stringToDate (full, date)</a></li>
+              <li><a href="#" onclick="doStringToDate({formatLength:'full', selector:'time'})">stringToDate (full, time)</a></li>
+              <li><a href="#" onclick="doStringToDate({formatLength:'full', selector:'date and time'})">stringToDate (full, date and time)</a></li>
+            </ul>
+          </div>
+          <div data-role="collapsible">
+            <h2>Locale</h2>
+            <ul data-role="listview">
+              <li><a href="#" onclick="doLocaleGetPreferredLanguage()">getPreferredLanguage</a></li>
+              <li><a href="#" onclick="doLocaleGetLocaleName()">getLocaleName</a></li>
+            </ul>
+          </div>
+          <div data-role="collapsible">
+            <h2>Number</h2>
+            <ul data-role="listview">
+              <li data-role="list-divider">Get Number Pattern</li>
+              <li><a href="#" onclick="doGetNumberPattern()">getNumberPattern (default)</a></li>
+              <li><a href="#" onclick="doGetNumberPattern({type:'decimal'})">getNumberPattern (decimal)</a></li>
+              <li><a href="#" onclick="doGetNumberPattern({type:'percent'})">getNumberPattern (percent)</a></li>
+              <li><a href="#" onclick="doGetNumberPattern({type:'currency'})">getNumberPattern (currency)</a></li>
+              <li data-role="list-divider">Number to String</li>
+              <li><a href="#" onclick="doNumberToString()">numberToString (default)</a></li>
+              <li><a href="#" onclick="doNumberToString({type:'decimal'})">numberToString (decimal)</a></li>
+              <li><a href="#" onclick="doNumberToString({type:'percent'})">numberToString (percent)</a></li>
+              <li><a href="#" onclick="doNumberToString({type:'currency'})">numberToString (currency)</a></li>
+              <li data-role="list-divider">String to Number</li>
+              <li><a href="#" onclick="doStringToNumber()">stringToNumber (default)</a></li>
+              <li><a href="#" onclick="doStringToNumber({type:'decimal'})">stringToNumber (decimal)</a></li>
+              <li><a href="#" onclick="doStringToNumber({type:'percent'})">stringToNumber (percent)</a></li>
+              <li><a href="#" onclick="doStringToNumber({type:'currency'})">stringToNumber (currency)</a></li>
+            </ul>
+          </div>
+        </div>
+      </div>
+      <div data-role="footer" data-id="foot_main" data-position="fixed">
+        <h4>www.cordovacookbook.com</h4>
+      </div>
+    </section>
+
+    <!-- Results page -->
+
+    <section id="results" data-role="page" data-add-back-btn="true">
+      <header data-role="header">
+        <h1>Results</h1>
+      </header>
+      <div data-role="content">
+        <h1 id=pageTitle></h1>
+        <div id="pageContent"></div>
+      </div>
+      <div data-role="footer" data-id="foot_main" data-position="fixed">
+        <h4>www.cordovacookbook.com</h4>
+      </div>
+    </section>
+  </body>
+</html>

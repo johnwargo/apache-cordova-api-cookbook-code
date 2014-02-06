@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Example 9.4</title>
+    <meta name="viewport" content="width=device-width, height=device-height initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+    <meta http-equiv="Content-type" content="text/html; charset=utf-8" />
+    <link rel="stylesheet" type="text/css" href="css/topcoat-mobile-light.min.css" />
+    <script type="text/javascript" charset="utf-8" src="jquery-2.0.3.min.js"></script>
+    <script type="text/javascript" charset="utf-8" src="cordova.js"></script>
+    <script type="text/javascript" charset="utf-8">
+      function onBodyLoad() {
+        //Let the user know we've launched
+        alert("onBodyLoad");
+        //Set the Cordova deviceready event listener, so we'll know
+        //when Cordova is ready
+        document.addEventListener("deviceready", onDeviceReady, false);
+      }
+
+      function onDeviceReady() {
+        console.log("Entering onDeviceReady");
+        //Let the user know that the deviceReady event has fired
+        navigator.notification.alert("Cordova is ready", null, "Device Ready", "Continue");
+        console.log("Adding backbutton event");
+        document.addEventListener("backbutton", onBackButton, false);
+        console.log("Adding mennubutton event");
+        document.addEventListener("menubutton", onMenuButton, false);
+        console.log("Adding searchbutton event");
+        document.addEventListener("searchbutton", onSearchButton, false);
+        console.log("Adding startcallbutton event");
+        document.addEventListener("startcallbutton", onStartCallButton, false);
+        console.log("Adding endcallbutton event");
+        document.addEventListener("endcallbutton", onEndCallButton, false);
+        console.log("Adding volumedownbutton event");
+        document.addEventListener("volumedownbutton", onVolumeUpButton, false);
+        console.log("Adding volumeupbutton event");
+        document.addEventListener("volumeupbutton", onVolumeDownButton, false);
+        console.log("Leaving onDeviceReady");
+      }
+
+      function onBackButton() {
+        console.log("Entering onBackButton");
+        $('#buttonInfo').prepend("Back button pressed<br />");
+        //Do button processing here
+        navigator.app.exitApp();
+      };
+
+      function onMenuButton() {
+        console.log("Entering onMenuButton");
+        $('#buttonInfo').prepend("Menu button pressed<br />");
+        //Do button processing here
+
+      };
+
+      function onSearchButton() {
+        console.log("Entering onSearchButton");
+        $('#buttonInfo').prepend("Search button pressed<br />");
+        //Do button processing here
+
+      };
+
+      function onStartCallButton() {
+        console.log("Entering onstartCallButton");
+        $('#buttonInfo').prepend("Start Call button pressed<br />");
+        //Do button processing here
+
+      };
+
+      function onEndCallButton() {
+        console.log("Entering onEndCallButton");
+        $('#buttonInfo').prepend("end Call button pressed<br />");
+        //Do button processing here
+
+      };
+
+      function onVolumeUpButton() {
+        console.log("Entering onVolumeUpButton");
+        $('#buttonInfo').prepend("Volume Up button pressed<br />");
+        //Do button processing here
+
+      };
+
+      function onVolumeDownButton() {
+        console.log("Entering onVolumneDownButton");
+        $('#buttonInfo').prepend("Volume Down button pressed<br />");
+        //Do button processing here
+
+      };
+    </script>
+  </head>
+  <body onload="onBodyLoad()">
+    <div class="topcoat-navigation-bar">
+      <div class="topcoat-navigation-bar__item center full">
+        <h1 class="topcoat-navigation-bar__title">Example 9.4</h1>
+      </div>
+    </div>
+    <p>This is a Cordova application that monitors the Cordova button events.</p>
+    <p id="buttonInfo">Waiting for button press</p>
+  </body>
+</html>

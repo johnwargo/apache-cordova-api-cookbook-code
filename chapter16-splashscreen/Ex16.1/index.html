@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Example 16.1 - Splashscreen</title>
+    <meta http-equiv="Content-type" content="text/html; charset=utf-8">
+    <meta name="viewport" id="viewport" content="width=device-width, height=device-height, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <link rel="stylesheet" type="text/css" href="css/topcoat-mobile-light.min.css">
+    <script type="text/javascript" charset="utf-8" src="cordova.js"></script>
+    <script type="text/javascript" charset="utf-8">
+      var theTimer;
+
+      window.onerror = function(msg, url, line) {
+        var resStr;
+        var idx = url.lastIndexOf('/');
+        if (idx > -1) {
+          url = url.substring(idx + 1);
+        }
+        resStr = 'ERROR in ' + url + ' on line ' + line + ': ' + msg;
+        console.error(resStr);
+        alert(resStr);
+        return false;
+      };
+
+      function onBodyLoad() {
+        //Let the user know we've launched
+        alert("onBodyLoad");
+        //Set the Cordova deviceready event listener, so we'll know
+        //when Cordova is ready
+        document.addEventListener("deviceready", onDeviceReady, false);
+      }
+
+      function onDeviceReady() {
+        console.log("Entering onDeviceReady");
+        //Let the user know that the deviceReady event has fired
+        navigator.notification.alert("Cordova is ready", null, 'Splashscreen', 'Continue');
+        console.log("Leaving onDeviceReady");
+      }
+
+      function showSplashscreen() {
+        console.log('Entering showSplashscreen');
+        //Show the splashscreen
+        navigator.splashscreen.show();
+        //fire off a timer to hide the splashscreen in 5 seconds
+        theTimer = setInterval(onTimer, 5000);
+        console.log('Leaving showSplashscreen');
+      }
+
+      function onTimer() {
+        console.log('Entering onTimer');
+        if (theTimer) {
+          //Kill the timer
+          window.clearInterval(theTimer);
+          theTimer = null;
+          //Hide the splash screen
+          navigator.splashscreen.hide();
+        }
+        console.log('Leaving onTimer');
+      }
+    </script>
+  </head>
+  <body onload="onBodyLoad()">
+    <div class="topcoat-navigation-bar">
+      <div class="topcoat-navigation-bar__item center full">
+        <h1 class="topcoat-navigation-bar__title">Example 16.1</h1>
+      </div>
+    </div>
+    <p>This is a Cordova application that demonstrates the capabilities of the Cordova Splashscreen API.</p>
+    <button class="topcoat-button" onclick="showSplashscreen();">
+      Show Splashscreen
+    </button>
+  </body>
+</html>

@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Example 9.2</title>
+    <meta name="viewport" content="width=device-width, height=device-height initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+    <meta http-equiv="Content-type" content="text/html; charset=utf-8" />
+    <link rel="stylesheet" type="text/css" href="css/topcoat-mobile-light.min.css" />
+    <script type="text/javascript" charset="utf-8" src="jquery-2.0.3.min.js"></script>
+    <script type="text/javascript" charset="utf-8" src="cordova.js"></script>
+    <script type="text/javascript" charset="utf-8">
+      //Start time variable
+      var startTime, endTime;
+
+      function onBodyLoad() {
+        //Let the user know we've launched
+        alert("onBodyLoad");
+        //Set the Cordova deviceready event listener, so we'll know
+        //when Cordova is ready
+        document.addEventListener("deviceready", onDeviceReady, false);
+      }
+
+      function onDeviceReady() {
+        console.log("Entering onDeviceReady");
+        //Let the user know that the deviceReady event has fired
+        navigator.notification.alert("Cordova is ready", null, "Device Ready", "Continue");
+        // Add our Pause event listener
+        document.addEventListener("pause", processPause, false);
+        // Add our Resume event listener
+        document.addEventListener("resume", processResume, false)
+        console.log("Leaving onDeviceReady");
+      }
+
+      function processPause() {
+        console.log("Entering processPause");
+        $('#pauseInfo').prepend("Application paused.<br />");
+        //Set startTime to the current date/time
+        startTime = new Date();
+      }
+
+      function processResume() {
+        console.log("Entering processResume");
+        //Get the current date
+        endTime = new Date();
+        timeDiff = (endTime - startTime) / 1000;
+        //Update the screen
+        $('#pauseInfo').prepend("Paused for " + timeDiff + " seconds.");
+      }
+    </script>
+  </head>
+  <body onload="onBodyLoad()">
+    <div class="topcoat-navigation-bar">
+      <div class="topcoat-navigation-bar__item center full">
+        <h1 class="topcoat-navigation-bar__title">Example 9.2</h1>
+      </div>
+    </div>
+    <p>This is a Cordova application that exercises the Cordova Application events.</p>
+    <p id="pauseInfo"> Waiting for pause </p>
+  </body>
+</html>

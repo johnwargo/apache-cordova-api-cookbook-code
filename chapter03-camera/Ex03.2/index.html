@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Example 11-2</title>
+    <meta http-equiv="Content-type" content="text/html; charset=utf-8">
+    <meta name="viewport" id="viewport" content="width=device-width, height=device-height, initial-scale=1.0, maximum-scale=1.0, user-scalable=no;" />
+    <link rel="stylesheet" type="text/css" href="css/topcoat-mobile-light.min.css">
+    <script type="text/javascript" charset="utf-8" src="cordova.js"></script>
+    <script type="text/javascript" charset="utf-8">
+      function onBodyLoad() {
+        //Let the user know we've launched
+        alert("onBodyLoad");
+        //Set the Cordova deviceready event listener, so we'll know
+        //when Cordova is ready
+        document.addEventListener("deviceready", onDeviceReady, false);
+      }
+
+      function onDeviceReady() {
+        console.log("Entering onDeviceReady");
+        //Let the user know that the deviceReady event has fired
+        navigator.notification.alert("Cordova is ready", null, "Device Ready", "Continue");
+        console.log("Leaving onDeviceReady");
+      }
+
+      function takePhoto() {
+        console.log("Entering takePhoto");
+        navigator.camera.getPicture(cameraSuccess, cameraError, {
+          quality : 50,
+          destinationType : Camera.DestinationType.FILE_URI
+        });
+        console.log("Leaving takePhoto");
+      }
+
+      function cameraSuccess(imageURL) {
+        console.log("Entering cameraSuccess");
+        console.log("Image URL: " + imageURL);
+        //Get a handle to the image container div
+        ic = document.getElementById('imageContainer');
+        //Then write an image tag out to the div using the
+        //URL we received from the camera application.
+        ic.innerHTML = '<img src="' + imageURL + '" width="50%" />';
+        console.log("Leaving cameraSuccess");
+      }
+
+      function cameraError(e) {
+        console.log("Entering cameraError");
+        console.error(JSON.stringify(e));
+        navigator.notification.alert(JSON.stringify(e), null, "Camera Error", "Continue");
+        console.log("Leaving cameraError");
+      }
+    </script>
+  </head>
+  <body onload="onBodyLoad()">
+    <div class="topcoat-navigation-bar">
+      <div class="topcoat-navigation-bar__item center full">
+        <h1 class="topcoat-navigation-bar__title">Example 3.2</h1>
+      </div>
+    </div>
+    <p>This is a Cordova application that uses the Cordova Camera API to take a picture using the device camera application.</p>
+    <button class="topcoat-button" onclick="takePhoto();">
+      Take a Picture
+    </button>
+    <hr />
+    <div id="imageContainer"></div>
+  </body>
+</html>

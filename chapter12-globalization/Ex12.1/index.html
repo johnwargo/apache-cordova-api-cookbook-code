@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Example 12.1</title>
+    <meta charset="utf-8" />
+    <meta name="format-detection" content="telephone=no" />
+    <meta name="viewport" content="user-scalable=no, initial-scale=1, maximum-scale=1, minimum-scale=1, width=device-width, height=device-height" />
+    <link rel="stylesheet" type="text/css" href="css/topcoat-mobile-light.min.css">
+    <script type="text/javascript" charset="utf-8" src="jquery-1.9.1.min.js"></script>
+    <script type="text/javascript" charset="utf-8" src="cordova.js"></script>
+    <script type="text/javascript" charset="utf-8">
+      function onBodyLoad() {
+        //Let the user know we've launched
+        alert("onBodyLoad");
+        //Set the Cordova deviceready event listener, so we'll know
+        //when Cordova is ready
+        document.addEventListener("deviceready", onDeviceReady, false);
+      }
+
+      function onDeviceReady() {
+        console.log("Entering onDeviceReady");
+        //Let the user know that the deviceReady event has fired
+        navigator.notification.alert("Cordova is ready", null, "Device Ready", "Continue");
+
+        //Populate the preferred language section of the page
+        navigator.globalization.getPreferredLanguage(function(res) {
+          $('#preferredLanguage').html(res.value);
+        }, function(res) {
+          $('#preferredLanguage').html('Error');
+        });
+
+        //populate the locale name section of the page
+        navigator.globalization.getLocaleName(function(res) {
+          $('#localeName').html(res.value);
+        }, function(res) {
+          $('#localeName').html('Error');
+        });
+
+        //Populate the First Day of the Week section of the page
+        navigator.globalization.getFirstDayOfWeek(function(res) {
+          navigator.globalization.getDateNames(function(dayNames) {
+            $('#res1').html(dayNames.value[res.value - 1]);
+          }, function(e) {
+            $('#res1').html(JSON.stringify(e));
+          }, {
+            type : 'wide',
+            item : 'days'
+          });
+        }, function(e) {
+          $('#res1').html(JSON.stringify(e));
+        });
+
+        //Populate the Currency Conversion portion of the page
+        var curVal = '42.17';
+        var options = {
+          type : 'currency'
+        };
+        navigator.globalization.getNumberPattern(function(res) {
+          navigator.globalization.stringToNumber(res.symbol + curVal, function(theResult) {
+            $('#res2').html(theResult.value);
+          }, function(e) {
+            $('#res2').html(JSON.stringify(e));
+          }, options);
+        }, function(e) {
+          $('#res2').html(JSON.stringify(e));
+        }, options);
+
+        console.log("Leaving onDeviceReady");
+      }
+
+    </script>
+
+  </head>
+  <body onload="onBodyLoad()">
+    <div class="topcoat-navigation-bar">
+      <div class="topcoat-navigation-bar__item center full">
+        <h1 class="topcoat-navigation-bar__title">Example 12.1</h1>
+      </div>
+    </div>
+    <p>A Cordova Application that demonstrates some of the capabilities of the Globalization API.</p>
+    <h1>Preferred Language</h1>
+    <p>Calls globalization.getPreferredLanguage to update the page with the current language for the device.</p>
+    <p><strong>Preferred Language: </strong><span id="preferredLanguage"></span></p>
+    <h1>Locale Name</h1>
+    <p>Calls globalization.getLocaleName to get the name of the device's current locale.</p>
+    <p><strong>Locale Name: </strong><span id="localeName"></span></p>
+    <h1>First Day of the Week</h1>
+    <p>This process uses globalization.getDateNames and globalization.getFirstDayOfWeek together to retrieve the name of the first day of the week.</p>
+    <p><strong>First day of the week: </strong><span id="res1"></span></p>
+    <h1>String to Number</h1>
+    <p>This process uses globalization.stringToNumber and globalization.getCurrencyPattern to generate a properly formatted currency string and convert it to a number. In this case, the application will append the correct currency character to '42.17' then convert it to a number.</p>
+    <p><strong>Conversion Result: </strong><span id="res2"></span></p>
+  </body>
+</html>

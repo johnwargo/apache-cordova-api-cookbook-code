@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Hello Cordova 2</title>
+    <meta http-equiv="Content-type" content="text/html; charset=utf-8">
+    <meta name="viewport" id="viewport" content="width=device-width, height=device-height, initial-scale=1.0, maximum-scale=1.0, user-scalable=no;" />
+    <link rel="stylesheet" type="text/css" href="css/topcoat-mobile-light.min.css">
+    <script type="text/javascript" charset="utf-8" src="cordova.js"></script>
+    <script type="text/javascript" charset="utf-8">
+      function onBodyLoad() {
+        //Let the user know we've launched
+        alert("onBodyLoad");
+        //Set the Cordova deviceready event listener, so we'll know
+        //when Cordova is ready
+        document.addEventListener("deviceready", onDeviceReady, false);
+      }
+
+      function makeListItem(textStr) {
+        return '<li class="topcoat-list__item">' + textStr + '</li>';
+      }
+
+      function onDeviceReady() {
+        console.log("Entering onDeviceReady");
+        //Let the user know that the deviceReady event has fired
+        navigator.notification.alert("Cordova is ready", null, "Device Ready", "Continue");
+        var tmpStr;
+        tmpStr = '<ul class="topcoat-list__container"><h3 class="topcoat-list__header">Device API Properties</h3>';
+        tmpStr += makeListItem('Cordova Version: ' + device.cordova);
+        tmpStr += makeListItem('Operating System: ' + device.platform);
+        tmpStr += makeListItem('OS Version: ' + device.version);
+        tmpStr += makeListItem('Device Model: ' + device.model);
+        tmpStr += makeListItem('Universally Unique Identifier: ' + device.uuid);
+        tmpStr += '</ul>';
+        //Get the appInfo DOM element
+        var element = document.getElementById('devInfo');
+        //replace it with specific information about the device running the application
+        element.innerHTML = tmpStr;
+        console.log("Leaving onDeviceReady");
+      }
+    </script>
+  </head>
+  <body onload="onBodyLoad()">
+    <div class="topcoat-navigation-bar">
+      <div class="topcoat-navigation-bar__item center full">
+        <h1 class="topcoat-navigation-bar__title">Hello Cordova #2</h1>
+      </div>
+    </div>
+    <h1>Cordova Information</h1>
+    <p>This is an Apache Cordova application that makes calls to the Cordova Device API.</p>
+    <div class="topcoat-list" id="devInfo">
+      <h3 class="topcoat-list__header">Waiting for Cordova to initialize</h3>
+    </div>
+  </body>
+</html>
