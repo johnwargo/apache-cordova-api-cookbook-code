@@ -124,11 +124,11 @@ function doStringToDate(options) {
   var hasOptions = ( typeof options !== 'undefined' );
   //Open the results page with a Date header
   switchPage('Date: stringToDate');
-  var strDate = '01/05/2014 8:00 AM'
+  var strDate = '01/05/2014 8:00 AM';
   if (hasOptions) {
     if (options.selector == 'time') {
       strDate = '8:00 AM';
-    } else {
+    } else if (options.selector == 'date') {
       strDate = '01/05/2014';
     }
     //Write the API call to the page
@@ -182,7 +182,9 @@ function doNumberToString(options) {
   if (hasOptions) {
     if (options.type == 'percent') {
       //Divide our number by 100
-      var number = number / 100;
+      number = number / 100;
+      number = 42.65;
+    } else if (options.type == 'decimal') {
     }
     //Write the API call to the page
     writeCode('navigator.globalization.numberToString(' + number + ', successCallback, errorCallback, ' + JSON.stringify(options) + ');');
@@ -208,11 +210,11 @@ function doStringToNumber(options) {
       //You should use getCurrencyPattern to determing the currency prefix to use here
       //I'm cheating by just adding the US $ sign to the string
       number = '$' + number;
-    };
+    }
     if (options.type == 'percent') {
       //Convert the string to a percentage
       number = '42%';
-    };
+    }
     //Write the API call to the page
     writeCode('navigator.globalization.stringToNumber("' + number + '", successCallback, errorCallback, ' + JSON.stringify(options) + ');');
     //call the API

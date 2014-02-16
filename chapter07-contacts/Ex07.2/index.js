@@ -94,16 +94,18 @@ function searchSuccess(contacts) {
       theContact = contacts[i];
       console.log(JSON.stringify(theContact));
       //on iOS displayName isn't supported, so we can't use it
-      if (theContact.displayName == null) {
-        theList += "<li><a onclick='showContact(" + i + ");'>" + theContact.name.familyName + ", " + theContact.name.givenName + "</a></li>";
-      } else {
+      if (theContact.displayName) {
         theList += "<li><a onclick='showContact(" + i + ");'>" + theContact.displayName + "</a></li>";
+      } else {
+        theList += "<li><a onclick='showContact(" + i + ");'>" + theContact.name.familyName + ", " + theContact.name.givenName + "</a></li>";
       }
     }
     //Populate the listview
-    $('#contacts').html(theList);    
+    $('#contacts').html(theList);
     //Then switch to the Contact Details page
-    $.mobile.changePage("#contactList", { transition : "slide"}, false, true);
+    $.mobile.changePage("#contactList", {
+      transition : "slide"
+    }, false, true);
     //Refrest the ListView contents (can't do this until the page is initialized)
     $('#contacts').listview('refresh');
   } else {
@@ -151,7 +153,7 @@ function searchError(errObj) {
 
 function showContact(contactIdx) {
   console.log("Entering showContact");
-  console.log(contactIdx);  
+  console.log(contactIdx);
   var len, i, contact;
   //=======================================================
   //Populate the Contact Details page with information
@@ -163,12 +165,12 @@ function showContact(contactIdx) {
   //Next set the header content for the page to match the
   //contact's full name. Unfortunately iOS doesn't use displayName,
   //so we have to figure out what to use
-  if (contact.displayName == null) {
+  if (contact.displayName) {
+    //Just use the display name
+    $('#contactName').text(contact.displayName);    
+  } else {
     //Build the name from the available fields
     $('#contactName').text(contact.name.givenName + " " + contact.name.familyName);
-  } else {
-    //or just use the display name
-    $('#contactName').text(contact.displayName);
   }
   //=======================================================
   //Then populate the body of the content area with
@@ -179,7 +181,7 @@ function showContact(contactIdx) {
   cd += '<strong>Last Name:</strong> ' + contact.name.familyName + br;
 
   //Let's do email addresses
-  if (contact.emails != null) {
+  if (contact.emails !== null) {
     len = contact.emails.length;
     if (len > 0) {
       for ( i = 0, len; i < len; i += 1) {
@@ -192,7 +194,7 @@ function showContact(contactIdx) {
   //=======================================================
   //Now phone numbers
   //=======================================================
-  if (contact.phoneNumbers != null) {
+  if (contact.phoneNumbers !== null) {
     len = contact.phoneNumbers.length;
     if (len > 0) {
       for ( i = 0, len; i < len; i += 1) {
@@ -203,10 +205,10 @@ function showContact(contactIdx) {
     cd += '<strong>Phone Numbers:</strong> not available' + br;
   }
   //=======================================================
-  //Show all the contact objects/properties on the bottom 
+  //Show all the contact objects/properties on the bottom
   //=======================================================
   cd += hr;
-  for (myKey in contact) {
+  for (var myKey in contact) {
     cd += "<strong>Contact[" + myKey + "]</strong> = " + contact[myKey] + br;
   }
   $('#detailContent').html(cd);

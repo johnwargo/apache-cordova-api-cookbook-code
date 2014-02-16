@@ -48,7 +48,7 @@ function onDeviceReady() {
       //Write it out to the page
       writeToOutput("### Progress: " + progress + "%");
     }
-  }
+  };
   writeToOutput("Leaving onDeviceReady");
 }
 
@@ -85,7 +85,7 @@ function doUpload() {
   var theFileOptions = {
     create : true,
     exclusive : false
-  }
+  };
   //Ask the file system to create the file
   theFileSystem.root.getFile(uploadFile, theFileOptions, getFileSuccess, onFileError);
   writeToOutput("Leaving doUpload");

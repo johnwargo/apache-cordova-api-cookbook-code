@@ -20,9 +20,7 @@
       }
 
       function onDeviceReady() {
-        console.log("Entering onDeviceReady");
-        //Let the user know that the deviceReady event has fired
-        navigator.notification.alert("Cordova is ready", null, "Device Ready", "Continue");
+        console.log("Entering onDeviceReady");        
         var tmpStr;
         tmpStr = '<ul class="topcoat-list__container"><h3 class="topcoat-list__header">Device API Properties</h3>';
         tmpStr += makeListItem('Cordova Version: ' + device.cordova);

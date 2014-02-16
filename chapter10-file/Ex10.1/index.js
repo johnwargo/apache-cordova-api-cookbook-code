@@ -74,7 +74,7 @@ function dirReaderSuccess(dirEntries) {
     //Empty out the file list variable
     fl = '';
     for ( i = 0; i < len; i++) {
-      if (dirEntries[i].isDirectory == true) {
+      if (dirEntries[i].isDirectory) {
         fl += '<li><a href="#" onclick="processEntry(' + i + ');">Directory: ' + dirEntries[i].name + '</a></li>';
       } else {
         fl += '<li><a href="#" onclick="processEntry(' + i + ');">File: ' + dirEntries[i].name + '</a></li>';
@@ -99,7 +99,7 @@ function processEntry(entryIndex) {
   fi += startP + '<strong>Name</strong>: ' + theEntry.name + endP;
   fi += startP + '<strong>Full Path</strong>: ' + theEntry.fullPath + endP;
   fi += startP + '<strong>URI</strong>: ' + theEntry.toURI() + endP;
-  if (theEntry.isFile == true) {
+  if (theEntry.isFile) {
     fi += startP + 'The entry is a file' + endP;
   } else {
     fi += startP + 'The entry is a directory' + endP;
@@ -117,7 +117,7 @@ function getMetadataSuccess(metadata) {
   console.log("Entering getMetadataSuccess");
   console.log(JSON.stringify(metadata));
   var md = '';
-  for (aKey in metadata) {
+  for (var aKey in metadata) {
     md += '<b>' + aKey + '</b>: ' + metadata[aKey] + br;
   }
   md += hr;
@@ -135,7 +135,7 @@ function writeFile() {
     var theFileOptions = {
       create : true,
       exclusive : false
-    }
+    };
     console.log("File Options: " + JSON.stringify(theFileOptions));
     console.log("Creating file");
     theFileSystem.root.getFile(theFileName, theFileOptions, getFileSuccess, onFileError);
