@@ -108,6 +108,17 @@ function processEntry(entryIndex) {
   $('#fileInfo').html(fi);
   //Display the directory entries page
   $.mobile.changePage("#fileDetails", { transition : "slide"}, false, true);
+  
+  //Show or hide the View File button based on whether it's a 
+  //directory entry or file entry
+  if (theEntry.isFile) {
+    //Show the results page View File button (since this is a file and we can open it)
+    $('#viewFileButton').show();
+  } else {
+    //Hide the results page View File button (since we're working with a directory)
+    $('#viewFileButton').hide();
+  }
+  
   //Now go off and see if you can get meta data about the file
   theEntry.getMetadata(getMetadataSuccess, onFileError);
   console.log("Leaving processEntry");

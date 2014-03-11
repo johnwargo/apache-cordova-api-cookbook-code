@@ -64,9 +64,9 @@
           console.log("Device is not plugged in");
           msgText = "not ";
         }
-        msgText = status.level + "% (" + msgText + "plugged in) <br />";
+        msgText = status.level + "% (" + msgText + "plugged in)";
         console.log("Battery " + msgText);
-        $('#batInfo').prepend(msgText);
+        $('#batInfo').prepend(msgText + "<br />");
       }
 
     </script>

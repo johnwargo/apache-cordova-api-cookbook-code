@@ -48,7 +48,9 @@ function getFileSystemSuccess(fs) {
   //Kick off a refresh of the file list
   refreshFileList();
   //Switch the directory entries page as the file list is built
-  $.mobile.changePage("#dirList", { transition : "slide"}, false, true);
+  $.mobile.changePage("#dirList", {
+    transition : "slide"
+  }, false, true);
   console.log("Leaving getFileSystemSuccess");
 }
 
@@ -62,7 +64,6 @@ function refreshFileList() {
 
 function dirReaderSuccess(dirEntries) {
   console.log("Entering dirReaderSuccess");
-  console.log(JSON.stringify(dirEntries));
   var i, fl, len;
   //Whack the previous dir entries
   $('#dirEntryList').empty();
@@ -104,10 +105,23 @@ function processEntry(entryIndex) {
   } else {
     fi += startP + 'The entry is a directory' + endP;
   }
+
   //Update the page content with information about the file
   $('#fileInfo').html(fi);
   //Display the directory entries page
-  $.mobile.changePage("#fileDetails", { transition : "slide"}, false, true);
+  $.mobile.changePage("#fileDetails", {
+    transition : "slide"
+  }, false, true);
+
+  //Show or hide the View File button based on whether it's a 
+  //directory entry or file entry
+  if (theEntry.isFile) {
+    //Show the results page View File button (since this is a file and we can open it)
+    $('#viewFileButton').show();
+  } else {
+    //Hide the results page View File button (since we're working with a directory)
+    $('#viewFileButton').hide();
+  }
   //Now go off and see if you can get meta data about the file
   theEntry.getMetadata(getMetadataSuccess, onFileError);
   console.log("Leaving processEntry");
@@ -231,9 +245,11 @@ function viewFile() {
   //Set the file name on the page
   $('#viewFileName').html('<h1>' + theEntry.name + '</h1>');
   //Clear out any previous load messages
-   $('#readInfo').html('');
+  $('#readInfo').html('');
   //Display the directory entries page
-  $.mobile.changePage("#viewFile", { transition : "slide"}, false, true);
+  $.mobile.changePage("#viewFile", {
+    transition : "slide"
+  }, false, true);
   theEntry.file(fileReaderSuccess, onFileError);
   console.log("Leaving viewFile");
 }

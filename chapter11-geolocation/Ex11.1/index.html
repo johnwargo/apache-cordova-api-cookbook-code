@@ -32,7 +32,7 @@
         //Set the variable that lets other parts of the program
         //know that Cordova has initialized
         cvaReady = true;
-        //Get a handle we'll use to manipulate the accelerometer
+        //Get a handle we'll use to manipulate the geolocation
         //content on the page
         li = document.getElementById('locationInfo');
         console.log("Leaving onDeviceReady");
@@ -50,7 +50,7 @@
           //get the current location
           navigator.geolocation.getCurrentPosition(locationSuccess, locationError, locOptions);
           //Clear the current location while we wait for a reading
-          lc.innerHTML = "Reading location...";
+          li.innerHTML = "Reading location...";
 
         } else {
           alert("Please wait,Cordova is not ready.");

@@ -50,12 +50,12 @@ function searchContacts() {
   var contactFields = [];
   switch(searchScope) {
     case 1:
-      //Return name fields only
-      contactFields = ['displayName', 'name', 'nickname'];
+      //Return address fields only
+      contactFields = ['addresses'];
       break;
     case 2:
-      //Return address fields only
-      contactFields = ['streetAddress', 'locality', 'region', 'postalCode', 'country'];
+      //Return name fields only
+      contactFields = ['displayName', 'name', 'nickname'];
       break;
     case 3:
       //Notes field only
@@ -64,6 +64,7 @@ function searchContacts() {
     default:
       //Returns all fields
       contactFields = ['*'];
+      break;
   }
   //Populate the search options object
   var searchOptions = {
@@ -167,7 +168,7 @@ function showContact(contactIdx) {
   //so we have to figure out what to use
   if (contact.displayName) {
     //Just use the display name
-    $('#contactName').text(contact.displayName);    
+    $('#contactName').text(contact.displayName);
   } else {
     //Build the name from the available fields
     $('#contactName').text(contact.name.givenName + " " + contact.name.familyName);
