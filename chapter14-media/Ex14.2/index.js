@@ -105,7 +105,7 @@ function mediaError(errObj) {
   if (errObj.message.length > 0) {
     errStr = errObj.message + " (Code: " + errObj.code + ")";
   } else {
-    errStr = "Eror code: " + errObj.code + " (No error message provided by the Media API)";
+    errStr = "Error code: " + errObj.code + " (No error message provided by the Media API)";
   }
   console.error(errStr);
   navigator.notification.alert(errStr, null, "Media Error", alertBtn);
