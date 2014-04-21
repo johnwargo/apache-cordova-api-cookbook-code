@@ -107,7 +107,7 @@ function searchSuccess(contacts) {
     $.mobile.changePage("#contactList", {
       transition : "slide"
     }, false, true);
-    //Refrest the ListView contents (can't do this until the page is initialized)
+    //Refresh the ListView contents (can't do this until the page is initialized)
     $('#contacts').listview('refresh');
   } else {
     console.log("No results");
