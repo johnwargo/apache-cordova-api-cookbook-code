@@ -35,7 +35,7 @@
         console.log("Entering onDeviceReady");
         //Let the user know that the deviceReady event has fired
         navigator.notification.alert("Cordova is ready", null, "Device Ready", "Continue");
-        //Get a handle we'll use to maipulate the accelerometer
+        //Get a handle we'll use to manipulate the accelerometer
         //content on the page
         ac = document.getElementById('accelInfo');
         //Blank out the results area of the page as we have nothing to
@@ -95,7 +95,7 @@
       function onAccelSuccess(accel) {
         console.log("Entering onAccelSuccess");
         //Write the accel object contents to the console
-        //so the developer can see it
+        //so the developer can see the results
         console.log(accel);
         //We received something from the API, so...
         //first get the timestamp in a date object
