@@ -160,7 +160,7 @@ function writeFile() {
 }
 
 function createRandomString(numChars) {
-  var chars = "abcdefghiklmnopqrstuvwxyz";
+  var chars = "abcdefghijklmnopqrstuvwxyz";
   var tmpStr = "";
   for (var i = 0; i < numChars; i++) {
     var rnum = Math.floor(Math.random() * chars.length);

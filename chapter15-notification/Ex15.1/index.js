@@ -117,25 +117,25 @@ function confirmSuccess3(btnNum) {
 
 function doPrompt1() {
   console.log("Entering doPrompt");
-  navigator.notification.prompt("What is your favorite Cordova API?.", promptSuccess);
+  navigator.notification.prompt("What is your favorite Cordova API?", promptSuccess);
   console.log("Leaving doPrompt");
 }
 
 function doPrompt2() {
   console.log("Entering doPrompt");
-  navigator.notification.prompt("What is your favorite Cordova API?.", promptSuccess, "Simple Prompt 2");
+  navigator.notification.prompt("What is your favorite Cordova API?", promptSuccess, "Simple Prompt 2");
   console.log("Leaving doPrompt");
 }
 
 function doPrompt3() {
   console.log("Entering doPrompt");
-  navigator.notification.prompt("What is your favorite Cordova API?.", promptSuccess, "Simple Prompt 3", ["Yeah Baby", "Nevermind"]);
+  navigator.notification.prompt("What is your favorite Cordova API?", promptSuccess, "Simple Prompt 3", ["Yeah Baby", "Nevermind"]);
   console.log("Leaving doPrompt");
 }
 
 function doPrompt4() {
   console.log("Entering doPrompt");
-  navigator.notification.prompt("What is your favorite Cordova API?.", promptSuccess, "Simple Prompt 3", ["Yeah Baby", "Nevermind"], "All of them!");
+  navigator.notification.prompt("What is your favorite Cordova API?", promptSuccess, "Simple Prompt 3", ["Yeah Baby", "Nevermind"], "All of them!");
   console.log("Leaving doPrompt");
 }
 
