@@ -107,7 +107,6 @@
           return '<li class="topcoat-list__item">' + theLabel + ': ' + theValue + '</li>';
         }
 
-
         console.log("Entering locationSuccess");
         //get the timestamp in a date object so we can work with it
         var d = new Date(loc.timestamp);
@@ -144,6 +143,14 @@
         console.error("Entering locationError");
         li.innerHTML = 'Error Reading Location';
         console.error(JSON.stringify(errObj));
+		//Do we have a watch active?
+		if (watchID) {
+          console.log("Cancelling watch");
+          //Clear the watch
+          navigator.geolocation.clearWatch(watchID);
+          //Clear the watch ID (just because)
+          watchID = null;                 
+        }	
         navigator.notification.alert("Error: " + errObj.message + " (code: " + errObj.code + ")", null, alertTitle, alertBtn);
         console.error("Leaving locationError");
       }
