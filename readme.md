@@ -1,5 +1,5 @@
 Apache Cordova API Cookbook
-===========================
+======================================
 
 This repository contains the complete source code from the Apache Cordova API Cookbook (www.cordovacookbook.com) from Pearson Education. The code you see here is intended to augment the material in the book and is intended for people who have purchased a copy of the book. If you use this code and haven't purchased a copy of the book, why not take a moment and buy a copy using the links at http://www.cordovacookbook.com/Where-to-Buy/. 
 
@@ -9,4 +9,6 @@ To make things easier for you, I included the library files for each with the pr
 
 ***
 
-You can find information on many different topics on my personal blog at www.johnwargo.com. Learn about all of my publications at www.johnwargobooks.com. 
+You can find information on many different topics on my [personal blog](http://www.johnwargo.com). Learn about all of my publications at [John Wargo Books](http://www.johnwargobooks.com).
+
+  
